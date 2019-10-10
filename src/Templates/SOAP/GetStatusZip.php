@@ -32,9 +32,11 @@ class GetStatusZip extends Template implements CreateTemplate
      * @param string $pathCertificate
      * @param string $passwors
      */
-    public function __construct($pathCertificate, $passwors)
+    public function __construct($pathCertificate, $passwors, $Ambiente = false)
     {
         parent::__construct($pathCertificate, $passwors);
+        if ($Ambiente)
+          $this->To = $Ambiente;
     }
 
     /**

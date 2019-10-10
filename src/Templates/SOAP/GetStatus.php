@@ -32,9 +32,12 @@ class GetStatus extends Template implements CreateTemplate
      * @param string $pathCertificate
      * @param string $passwors
      */
-    public function __construct($pathCertificate, $passwors)
+    public function __construct($pathCertificate, $passwors, $Ambiente = false)
     {
         parent::__construct($pathCertificate, $passwors);
+        if($Ambiente)
+          $this->To = $Ambiente;
+//          $this->To = 'https://vpfe.dian.gov.co/WcfDianCustomerServices.svc?wsdl';
     }
 
     /**
