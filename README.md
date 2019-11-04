@@ -15,6 +15,16 @@ Paquete para facturacion electronica Colombia
 * 5: Licencia LGPL.
 * 6: Contiene pruebas válidas para el envío de notas de débito y el nombre del documento estándar.
 
+# Funciones
+* Firma de documentos
+* Envió asincrono
+* Consulta de estado por zipkey
+* Consulta de estado por cufe
+* Consulta de rangos de numeración
+* Envió de set de pruebas asíncrono
+* 
+
+
 # Resources
 * [Documentation](https://soenac.com/ubl21-dian)
 
