@@ -26,6 +26,8 @@ Paquete para facturacion electronica Colombia
 
 # Resources
 * [Documentation](https://soenac.com/ubl21-dian)
+* [Instalacion](https://docs.google.com/document/d/1WtGOfzf6hzfuC3tKC5uNlcibunUBFu8HgveXoj3_3_s/edit?usp=sharing)
+
 
 
 
