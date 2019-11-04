@@ -8,12 +8,12 @@ Paquete para facturacion electronica Colombia
 
 
 # Tags
-* 1.0: Contains valid tests with binary security token (SOAP) and XAdES signature (XML) with algorithms sha1, sha256 and sha512.
-* 1.1: Contains main templates for Web Service consumption, require curl as a dependency.
-* 1.1.1: Canonization error is solved.
-* 1.2: Contains valid proofs for the sending of credit notes and calculation of the CUDE.
-* 1.3: License LGPL.
-* 2.0: Contains valid proofs for the sending of debit notes and document name standard.
+* 1: Contiene pruebas válidas con el token de seguridad binario (SOAP) y la firma XAdES (XML) con los algoritmos sha1, sha256 y sha512.
+* 2: Contiene las plantillas principales para el consumo del servicio web, requiere curl como una dependencia.
+* 3: Se soluciona el error de canonización.
+* 4: Contiene pruebas válidas para el envío de notas de crédito y el cálculo del CUDE.
+* 5: Licencia LGPL.
+* 6: Contiene pruebas válidas para el envío de notas de débito y el nombre del documento estándar.
 
 # Resources
 * [Documentation](https://soenac.com/ubl21-dian)
