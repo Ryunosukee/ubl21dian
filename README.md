@@ -22,7 +22,6 @@ Paquete para facturacion electronica Colombia
 * Consulta de estado por cufe
 * Consulta de rangos de numeración
 * Envió de set de pruebas asíncrono
-* 
 
 
 # Resources
