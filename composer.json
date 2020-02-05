@@ -1,5 +1,5 @@
 {
-    "name": "stenfrank/ubl21dian",
+    "name": "torresoftware/ubl21dian",
     "type": "library",
     "description": "Core for electronic invoicing pre-validation - DIAN UBL 2.1",
     "homepage": "https://soenac.com",
@@ -12,13 +12,13 @@
         "core"
     ],
     "support": {
-        "issues": "https://github.com/Stenfrank/ubl21dian/issues",
-        "source": "https://github.com/Stenfrank/ubl21dian"
+        "issues": "https://github.com/torresoftware/ubl21dian/issues",
+        "source": "https://github.com/torresoftware/ubl21dian"
     },
     "license": "LGPL-3.0",
     "authors": [
         {
-            "name": "Stenfrank",
+            "name": "torresoftware",
             "email": "frank921713@hotmail.com",
             "homepage": "https://soenac.com"
         }
@@ -39,12 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Stenfrank\\UBL21dian\\": "src/"
+            "torresoftware\\UBL21dian\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Stenfrank\\Tests\\": "tests/"
+            "torresoftware\\Tests\\": "tests/"
         }
     }
 }
