@@ -1,6 +1,6 @@
 <?php
 
-namespace Stenfrank\Tests;
+namespace ubl21dian\Tests;
 
 /**
  * Test case.

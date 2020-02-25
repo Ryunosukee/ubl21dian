@@ -1,9 +1,9 @@
 <?php
 
-namespace Stenfrank\UBL21dian\Templates\SOAP;
+namespace ubl21dian\Templates\SOAP;
 
-use Stenfrank\UBL21dian\Templates\Template;
-use Stenfrank\UBL21dian\Templates\CreateTemplate;
+use ubl21dian\Templates\Template;
+use ubl21dian\Templates\CreateTemplate;
 
 /**
  * Get Numbering Range.

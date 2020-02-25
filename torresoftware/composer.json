@@ -1,5 +1,5 @@
 {
-    "name": "torresoftware/ubl21dian",
+    "name": "ubl21dian/torresoftware",
     "type": "library",
     "description": "Core for electronic invoicing pre-validation - DIAN UBL 2.1",
     "homepage": "https://soenac.com",
@@ -39,12 +39,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Stenfrank\\UBL21dian\\": "src/"
+            "ubl21dian\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Stenfrank\\Tests\\": "tests/"
+            "ubl21dian\\test\\": "tests/"
         }
     }
 }

@@ -1,11 +1,11 @@
 <?php
 
-namespace Stenfrank\Tests;
+namespace ubl21dian\Tests;
 
 use DOMDocument;
-use Stenfrank\UBL21dian\Client;
-use Stenfrank\UBL21dian\Templates\SOAP\GetStatus;
-use Stenfrank\UBL21dian\Templates\SOAP\GetStatusZip;
+use ubl21dian\Client;
+use ubl21dian\Templates\SOAP\GetStatus;
+use ubl21dian\Templates\SOAP\GetStatusZip;
 
 /**
  * Client test.

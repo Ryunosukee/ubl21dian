@@ -1,21 +1,21 @@
 <?php
 
-namespace Stenfrank\UBL21dian\Templates\SOAP;
+namespace ubl21dian\Templates\SOAP;
 
-use Stenfrank\UBL21dian\Templates\Template;
-use Stenfrank\UBL21dian\Templates\CreateTemplate;
+use ubl21dian\Templates\Template;
+use ubl21dian\Templates\CreateTemplate;
 
 /**
- * Send test set async.
+ * Send bill async.
  */
-class SendTestSetAsync extends Template implements CreateTemplate
+class SendBillAsync extends Template implements CreateTemplate
 {
     /**
      * Action.
      *
      * @var string
      */
-    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendTestSetAsync';
+    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendBillAsync';
 
     /**
      * Required properties.
@@ -25,7 +25,6 @@ class SendTestSetAsync extends Template implements CreateTemplate
     protected $requiredProperties = [
         'fileName',
         'contentFile',
-        'testSetId',
     ];
 
     /**
@@ -49,14 +48,12 @@ class SendTestSetAsync extends Template implements CreateTemplate
         return $this->templateXMLSOAP = <<<XML
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wcf="http://wcf.dian.colombia">
     <soap:Body>
-        <wcf:SendTestSetAsync>
+        <wcf:SendBillAsync>
             <!--Optional:-->
             <wcf:fileName>{$this->fileName}</wcf:fileName>
             <!--Optional:-->
             <wcf:contentFile>{$this->contentFile}</wcf:contentFile>
-            <!--Optional:-->
-            <wcf:testSetId>{$this->testSetId}</wcf:testSetId>
-        </wcf:SendTestSetAsync>
+        </wcf:SendBillAsync>
     </soap:Body>
 </soap:Envelope>
 XML;

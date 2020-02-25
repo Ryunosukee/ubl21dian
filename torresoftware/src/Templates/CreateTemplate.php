@@ -1,6 +1,6 @@
 <?php
 
-namespace Stenfrank\UBL21dian\Templates;
+namespace ubl21dian\Templates;
 
 interface CreateTemplate
 {

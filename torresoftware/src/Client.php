@@ -1,10 +1,10 @@
 <?php
 
-namespace Stenfrank\UBL21dian;
+namespace ubl21dian;
 
 use DOMDocument;
 use Exception;
-use Stenfrank\UBL21dian\Templates\Template;
+use ubl21dian\Templates\Template;
 
 /**
  * Client.

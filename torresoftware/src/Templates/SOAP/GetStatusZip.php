@@ -1,21 +1,21 @@
 <?php
 
-namespace Stenfrank\UBL21dian\Templates\SOAP;
+namespace ubl21dian\Templates\SOAP;
 
-use Stenfrank\UBL21dian\Templates\Template;
-use Stenfrank\UBL21dian\Templates\CreateTemplate;
+use ubl21dian\Templates\Template;
+use ubl21dian\Templates\CreateTemplate;
 
 /**
- * Send bill async.
+ * Get status zip.
  */
-class SendBillSync extends Template implements CreateTemplate
+class GetStatusZip extends Template implements CreateTemplate
 {
     /**
      * Action.
      *
      * @var string
      */
-    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendBillSync';
+    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/GetStatusZip';
 
     /**
      * Required properties.
@@ -23,8 +23,7 @@ class SendBillSync extends Template implements CreateTemplate
      * @var array
      */
     protected $requiredProperties = [
-        'fileName',
-        'contentFile',
+        'trackId',
     ];
 
     /**
@@ -33,9 +32,11 @@ class SendBillSync extends Template implements CreateTemplate
      * @param string $pathCertificate
      * @param string $passwors
      */
-    public function __construct($pathCertificate, $passwors)
+    public function __construct($pathCertificate, $passwors, $Ambiente = false)
     {
         parent::__construct($pathCertificate, $passwors);
+        if ($Ambiente)
+          $this->To = $Ambiente;
     }
 
     /**
@@ -48,12 +49,10 @@ class SendBillSync extends Template implements CreateTemplate
         return $this->templateXMLSOAP = <<<XML
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wcf="http://wcf.dian.colombia">
     <soap:Body>
-        <wcf:SendBillSync>
+        <wcf:GetStatusZip>
             <!--Optional:-->
-            <wcf:fileName>{$this->fileName}</wcf:fileName>
-            <!--Optional:-->
-            <wcf:contentFile>{$this->contentFile}</wcf:contentFile>
-        </wcf:SendBillSync>
+            <wcf:trackId>{$this->trackId}</wcf:trackId>
+        </wcf:GetStatusZip>
     </soap:Body>
 </soap:Envelope>
 XML;

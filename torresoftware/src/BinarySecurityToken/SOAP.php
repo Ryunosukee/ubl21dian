@@ -1,10 +1,10 @@
 <?php
 
-namespace Stenfrank\UBL21dian\BinarySecurityToken;
+namespace ubl21dian\BinarySecurityToken;
 
 use Exception;
 use DOMDocument;
-use Stenfrank\UBL21dian\Sign;
+use ubl21dian\Sign;
 
 /**
  * SOAP.
