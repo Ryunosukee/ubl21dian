@@ -54,6 +54,7 @@ class Client
             'Content-type: application/soap+xml',
             'Content-length: '.strlen($template->xml),
         ]);
+        $GuardarEn = preg_replace("/[\r\n|\n|\r]+/", "", $GuardarEn);
         if ($GuardarEn){
           $file = fopen($GuardarEn, "w");
           fwrite($file, $template->xml);
@@ -95,6 +96,7 @@ class Client
         try {
             $xmlResponse = new DOMDocument();
             $xmlResponse->loadXML($this->response);
+            $GuardarEn = preg_replace("/[\r\n|\n|\r]+/", "", $GuardarEn);
             if($GuardarEn){
                 $file = fopen($GuardarEn, "w");
                 fwrite($file, $this->response);
