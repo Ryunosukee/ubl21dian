@@ -143,7 +143,7 @@ class SignInvoice extends Sign
 
     /**
      * Ruta donde se guardara el documento antes de firmar
-     * 
+     *
      * @var string
      */
 
@@ -169,10 +169,10 @@ class SignInvoice extends Sign
 
         $this->domDocument = new DOMDocument($this->version, $this->encoding);
         $this->domDocument->loadXML($this->xmlString);
-
+        $this->GuardarEn = preg_replace("/[\r\n|\n|\r]+/", "", $this->GuardarEn);
         if ($this->GuardarEn){
             file_put_contents($this->GuardarEn, $this->xmlString);
-        }    
+        }
 
         // DOMX path
         $this->domXPath = new DOMXPath($this->domDocument);
@@ -181,12 +181,21 @@ class SignInvoice extends Sign
         $this->softwareSecurityCode();
 
         // UUID
-        $this->setUUID();
+        if(strpos($this->xmlString, '</NominaIndividual>'))
+            $this->setCUNE();
+        else
+            if(strpos($this->xmlString, '</ApplicationResponse>'))
+                $this->setCUDEEVENT();
+            else
+                $this->setUUID();
 
         // Digest value xml clean
         $this->digestValueXML();
 
-        $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(1);
+        if(strpos($this->xmlString, '</NominaIndividual>'))
+            $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(0);
+        else
+            $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(1);
 
         $this->signature = $this->domDocument->createElement('ds:Signature');
         $this->signature->setAttribute('xmlns:ds', self::XMLDSIG);
@@ -403,8 +412,10 @@ class SignInvoice extends Sign
         if (is_null($this->softwareID) || is_null($this->pin)) {
             return;
         }
-
-        $this->getTag('SoftwareSecurityCode', 0)->nodeValue = hash('sha384', "{$this->softwareID}{$this->pin}{$this->getTag('ID', 0)->nodeValue}");
+        if($this->valueXML($this->domXPath->document->saveXML(), "/NominaIndividual/ProveedorXML/SoftwareSC/"))
+            $this->getTag('SoftwareSC', 0)->nodeValue = hash('sha384', "{$this->softwareID}{$this->pin}{$this->getTag('Numero', 0)->nodeValue}");
+        else
+            $this->getTag('SoftwareSecurityCode', 0)->nodeValue = hash('sha384', "{$this->softwareID}{$this->pin}{$this->getTag('ID', 0)->nodeValue}");
     }
 
     /**
@@ -426,12 +437,44 @@ class SignInvoice extends Sign
     }
 
     /**
+     * set CUNE.
+     */
+    private function setCUNE()
+    {
+        // Register name space
+        foreach ($this->ns as $key => $value) {
+            $this->domXPath->registerNameSpace($key, $value);
+        }
+
+        $this->cune();
+    }
+
+    /**
+     * set CUNE.
+     */
+    private function setCUDEEVENT()
+    {
+        // Register name space
+        foreach ($this->ns as $key => $value) {
+            $this->domXPath->registerNameSpace($key, $value);
+        }
+
+        $this->cudeevent();
+    }
+
+    /**
      * CUFE.
      */
     private function cufe()
     {
         $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:{$this->groupOfTotals}/cbc:LineExtensionAmount")->nodeValue}01".($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=01]/cbc:TaxAmount', false)->nodeValue ?? '0.00').'04'.($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=04]/cbc:TaxAmount', false)->nodeValue ?? '0.00').'03'.($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=03]/cbc:TaxAmount', false)->nodeValue ?? '0.00')."{$this->getQuery("cac:{$this->groupOfTotals}/cbc:PayableAmount")->nodeValue}{$this->getQuery('cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->getQuery('cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->technicalKey}{$this->getTag('ProfileExecutionID', 0)->nodeValue}");
         $this->getTag('QRCode', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUFE(), $this->getTag('QRCode', 0)->nodeValue);
+    }
+
+    public function ConsultarCUFE()
+    {
+        if (!is_null($this->technicalKey))
+            return $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:{$this->groupOfTotals}/cbc:LineExtensionAmount")->nodeValue}01".($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=01]/cbc:TaxAmount', false)->nodeValue ?? '0.00').'04'.($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=04]/cbc:TaxAmount', false)->nodeValue ?? '0.00').'03'.($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=03]/cbc:TaxAmount', false)->nodeValue ?? '0.00')."{$this->getQuery("cac:{$this->groupOfTotals}/cbc:PayableAmount")->nodeValue}{$this->getQuery('cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->getQuery('cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->technicalKey}{$this->getTag('ProfileExecutionID', 0)->nodeValue}");
     }
 
     /**
@@ -443,15 +486,40 @@ class SignInvoice extends Sign
         $this->getTag('QRCode', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUDE(), $this->getTag('QRCode', 0)->nodeValue);
     }
 
-    public function ConsultarCUFE()
-    {
-        if (!is_null($this->technicalKey))
-            return $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:{$this->groupOfTotals}/cbc:LineExtensionAmount")->nodeValue}01".($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=01]/cbc:TaxAmount', false)->nodeValue ?? '0.00').'04'.($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=04]/cbc:TaxAmount', false)->nodeValue ?? '0.00').'03'.($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=03]/cbc:TaxAmount', false)->nodeValue ?? '0.00')."{$this->getQuery("cac:{$this->groupOfTotals}/cbc:PayableAmount")->nodeValue}{$this->getQuery('cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->getQuery('cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->technicalKey}{$this->getTag('ProfileExecutionID', 0)->nodeValue}");
-    }
-
     public function ConsultarCUDE()
     {
         if (!is_null($this->pin))
             return $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:{$this->groupOfTotals}/cbc:LineExtensionAmount")->nodeValue}01".($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=01]/cbc:TaxAmount', false)->nodeValue ?? '0.00').'04'.($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=04]/cbc:TaxAmount', false)->nodeValue ?? '0.00').'03'.($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=03]/cbc:TaxAmount', false)->nodeValue ?? '0.00')."{$this->getQuery("cac:{$this->groupOfTotals}/cbc:PayableAmount")->nodeValue}{$this->getQuery('cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->getQuery('cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->pin}{$this->getTag('ProfileExecutionID', 0)->nodeValue}");
+    }
+
+    /**
+     * Cude Event.
+     */
+    private function cudeevent()
+    {
+        $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:SenderParty/cac:PartyTaxScheme/cbc:CompanyID")->nodeValue}{$this->getQuery("cac:ReceiverParty/cac:PartyTaxScheme/cbc:CompanyID")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:Response/cbc:ResponseCode")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:DocumentReference/cbc:ID")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:DocumentReference/cbc:DocumentTypeCode")->nodeValue}{$this->pin}");
+    }
+
+    public function ConsultarCUDEEVENT()
+    {
+        if (!is_null($this->pin))
+            return $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:SenderParty/cac:PartyTaxScheme/cbc:CompanyID")->nodeValue}{$this->getQuery("cac:ReceiverParty/cac:PartyTaxScheme/cbc:CompanyID")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:Response/cbc:ResponseCode")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:DocumentReference/cbc:ID")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:DocumentReference/cbc:DocumentTypeCode")->nodeValue}{$this->pin}");
+    }
+
+    /**
+     * CUFE.
+     */
+    private function cune()
+    {
+        $xmlStr = $this->domXPath->document->saveXML();
+        $this->getTag('CUNE', 0)->nodeValue = hash('sha384', "{$this->valueXML($xmlStr, '/NominaIndividual/NumeroSecuenciaXML/Numero/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/FechaGen/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/HoraGen/')}{$this->valueXML($xmlStr, '/NominaIndividual/DevengadosTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/DeduccionesTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/ComprobanteTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/Empleador/NIT/')}{$this->valueXML($xmlStr, '/NominaIndividual/Trabajador/NumeroDocumento/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/TipoXML/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/Ambiente/')}");
+        $this->getTag('CodigoQR', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUNE(), $this->getTag('CodigoQR', 0)->nodeValue);
+    }
+
+    public function ConsultarCUNE()
+    {
+        $xmlStr = $this->domXPath->document->saveXML();
+        if (!is_null($this->pin))
+            return $this->getTag('CUNE', 0)->nodeValue = hash('sha384', "{$this->valueXML($xmlStr, '/NominaIndividual/NumeroSecuenciaXML/Numero/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/FechaGen/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/HoraGen/')}{$this->valueXML($xmlStr, '/NominaIndividual/DevengadosTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/DeduccionesTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/ComprobanteTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/Empleador/NIT/')}{$this->valueXML($xmlStr, '/NominaIndividual/Trabajador/NumeroDocumento/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/TipoXML/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/Ambiente/')}");
     }
 }
