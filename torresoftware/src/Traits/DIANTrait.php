@@ -96,7 +96,7 @@ trait DIANTrait
      *
      * @return mixed
      */
-    protected function getTag($tagName, $item = 0)
+    protected function getTag($tagName, $item = 0, $attribute = NULL, $attribute_value = NULL)
     {
         $tag = $this->domDocument->documentElement->getElementsByTagName($tagName);
 
@@ -104,7 +104,15 @@ trait DIANTrait
             throw new Exception('Class '.get_class($this).": The tag name {$tagName} does not exist.");
         }
 
-        return $tag->item($item);
+        if($attribute)
+            if($attribute_value){
+                $tag->item($item)->setAttribute($attribute, $attribute_value);
+                return;
+            }
+            else
+                return $tag->item($item)->getAttribute($attribute);
+        else
+            return $tag->item($item);
     }
 
     protected function ValueXML($stringXML, $xpath)
@@ -114,11 +122,11 @@ trait DIANTrait
         $search = substr($xpath, 1, strpos(substr($xpath, 1), '/'));
         $posinicio = strpos($stringXML, "<".$search);
         if($posinicio == 0)
-           return NULL;
+           return false;
         $posinicio = strpos($stringXML, ">", $posinicio) + 1;
         $posCierre = strpos($stringXML, "</".$search.">", $posinicio);
         if($posCierre == 0)
-            return NULL;
+            return true;
         $valorXML = substr($stringXML, $posinicio, $posCierre - $posinicio);
         if(strcmp(substr($xpath, strpos($xpath, $search) + strlen($search)), '/') != 0)
             return $this->ValueXML($valorXML, substr($xpath, strpos($xpath, $search) + strlen($search)));

@@ -412,8 +412,9 @@ class SignInvoice extends Sign
         if (is_null($this->softwareID) || is_null($this->pin)) {
             return;
         }
-        if($this->valueXML($this->domXPath->document->saveXML(), "/NominaIndividual/ProveedorXML/SoftwareSC/"))
-            $this->getTag('SoftwareSC', 0)->nodeValue = hash('sha384', "{$this->softwareID}{$this->pin}{$this->getTag('Numero', 0)->nodeValue}");
+        if($this->valueXML($this->domXPath->document->saveXML(), "/NominaIndividual/ProveedorXML/")){
+            $this->getTag('ProveedorXML', 0, 'SoftwareSC', hash('sha384', "{$this->softwareID}{$this->pin}{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}"));
+        }
         else
             $this->getTag('SoftwareSecurityCode', 0)->nodeValue = hash('sha384', "{$this->softwareID}{$this->pin}{$this->getTag('ID', 0)->nodeValue}");
     }
@@ -512,7 +513,7 @@ class SignInvoice extends Sign
     private function cune()
     {
         $xmlStr = $this->domXPath->document->saveXML();
-        $this->getTag('CUNE', 0)->nodeValue = hash('sha384', "{$this->valueXML($xmlStr, '/NominaIndividual/NumeroSecuenciaXML/Numero/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/FechaGen/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/HoraGen/')}{$this->valueXML($xmlStr, '/NominaIndividual/DevengadosTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/DeduccionesTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/ComprobanteTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/Empleador/NIT/')}{$this->valueXML($xmlStr, '/NominaIndividual/Trabajador/NumeroDocumento/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/TipoXML/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/Ambiente/')}");
+        $this->getTag('InformacionGeneral', 0, 'CUNE', hash('sha384', "{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}{$this->getTag('InformacionGeneral', 0, 'FechaGen')}{$this->getTag('InformacionGeneral', 0, 'HoraGen')}{$this->getTag('DevengadosTotal', 0)->nodeValue}{$this->getTag('DeduccionesTotal', 0)->nodeValue}{$this->getTag('ComprobanteTotal', 0)->nodeValue}{$this->valueXML($xmlStr, '/NominaIndividual/Empleador/NIT/')}{$this->valueXML($xmlStr, '/NominaIndividual/Trabajador/NumeroDocumento/')}{$this->getTag('InformacionGeneral', 0, 'TipoXML')}{$this->getTag('InformacionGeneral', 0, 'Ambiente')}"));
         $this->getTag('CodigoQR', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUNE(), $this->getTag('CodigoQR', 0)->nodeValue);
     }
 
@@ -520,6 +521,6 @@ class SignInvoice extends Sign
     {
         $xmlStr = $this->domXPath->document->saveXML();
         if (!is_null($this->pin))
-            return $this->getTag('CUNE', 0)->nodeValue = hash('sha384', "{$this->valueXML($xmlStr, '/NominaIndividual/NumeroSecuenciaXML/Numero/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/FechaGen/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/HoraGen/')}{$this->valueXML($xmlStr, '/NominaIndividual/DevengadosTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/DeduccionesTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/ComprobanteTotal/')}{$this->valueXML($xmlStr, '/NominaIndividual/Empleador/NIT/')}{$this->valueXML($xmlStr, '/NominaIndividual/Trabajador/NumeroDocumento/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/TipoXML/')}{$this->valueXML($xmlStr, '/NominaIndividual/InformacionGeneral/Ambiente/')}");
+            return $this->getTag('InformacionGeneral', 0, 'CUNE');
     }
 }
