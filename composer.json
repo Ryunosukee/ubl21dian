@@ -2,7 +2,7 @@
     "name": "ubl21dian/torresoftware",
     "type": "library",
     "description": "Core for electronic invoicing pre-validation - DIAN UBL 2.1",
-    "homepage": "https://soenac.com",
+    "homepage": "http://facturalatam.com",
     "keywords": [
         "soap dian",
         "web service",
@@ -12,15 +12,15 @@
         "core"
     ],
     "support": {
-        "issues": "https://github.com/Stenfrank/ubl21dian/issues",
-        "source": "https://github.com/Stenfrank/ubl21dian"
+        "issues": "https://github.com/torresoftware/ubl21dian/issues",
+        "source": "https://github.com/torresoftware/ubl21dian"
     },
     "license": "LGPL-3.0",
     "authors": [
         {
-            "name": "Stenfrank",
-            "email": "frank921713@hotmail.com",
-            "homepage": "https://soenac.com"
+            "name": "facturalatam",
+            "email": "soporte@facturalatam.com",
+            "homepage": "https://facturalatam.com"
         }
     ],
     "minimum-stability": "stable",

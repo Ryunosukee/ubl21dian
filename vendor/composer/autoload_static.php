@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit18e4b02e451ab30789f24c0b9e866217
+class ComposerStaticInitfee43e30a688216a05bb4be9f03b70cf
 {
     public static $files = array (
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
@@ -13,6 +13,11 @@ class ComposerStaticInit18e4b02e451ab30789f24c0b9e866217
     );
 
     public static $prefixLengthsPsr4 = array (
+        'u' => 
+        array (
+            'ubl21dian\\test\\' => 15,
+            'ubl21dian\\' => 10,
+        ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
@@ -27,8 +32,6 @@ class ComposerStaticInit18e4b02e451ab30789f24c0b9e866217
             'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Contracts\\Translation\\' => 30,
             'Symfony\\Component\\Translation\\' => 30,
-            'Stenfrank\\UBL21dian\\' => 20,
-            'Stenfrank\\Tests\\' => 16,
         ),
         'P' => 
         array (
@@ -46,6 +49,14 @@ class ComposerStaticInit18e4b02e451ab30789f24c0b9e866217
     );
 
     public static $prefixDirsPsr4 = array (
+        'ubl21dian\\test\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/tests',
+        ),
+        'ubl21dian\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
+        ),
         'phpDocumentor\\Reflection\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
@@ -71,14 +82,6 @@ class ComposerStaticInit18e4b02e451ab30789f24c0b9e866217
         'Symfony\\Component\\Translation\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
-        ),
-        'Stenfrank\\UBL21dian\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
-        'Stenfrank\\Tests\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/tests',
         ),
         'Prophecy\\' => 
         array (
@@ -648,9 +651,9 @@ class ComposerStaticInit18e4b02e451ab30789f24c0b9e866217
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit18e4b02e451ab30789f24c0b9e866217::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit18e4b02e451ab30789f24c0b9e866217::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit18e4b02e451ab30789f24c0b9e866217::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfee43e30a688216a05bb4be9f03b70cf::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfee43e30a688216a05bb4be9f03b70cf::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitfee43e30a688216a05bb4be9f03b70cf::$classMap;
 
         }, null, ClassLoader::class);
     }
