@@ -3,7 +3,7 @@
 namespace ubl21dian\XAdES;
 
 /**
- * Sign Invoice.
+ * Sign Payroll.
  */
 class SignPayroll extends SignInvoice
 {
