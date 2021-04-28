@@ -194,8 +194,12 @@ class SignInvoice extends Sign
 
         if(strpos($this->xmlString, '</NominaIndividual>'))
             $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(0);
-        else
-            $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(1);
+        else{
+            if(strpos($this->xmlString, 'www.minsalud.gov.co'))
+                $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(2);
+            else
+                $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(1);
+        }
 
         $this->signature = $this->domDocument->createElement('ds:Signature');
         $this->signature->setAttribute('xmlns:ds', self::XMLDSIG);
