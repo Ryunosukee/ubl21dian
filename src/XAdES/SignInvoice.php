@@ -98,7 +98,7 @@ class SignInvoice extends Sign
     protected $ids = [
         'SignedPropertiesID' => 'SIGNED-PROPS',
         'SignatureValueID' => 'SIG-VALUE',
-        'SignatureID' => 'SOENAC',
+        'SignatureID' => 'TORRESOFTWARE',
         'KeyInfoID' => 'KEY-INFO',
         'ReferenceID' => 'REF',
     ];
