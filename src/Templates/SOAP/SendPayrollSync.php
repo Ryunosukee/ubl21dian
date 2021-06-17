@@ -15,7 +15,7 @@ class SendPayrollSync extends Template implements CreateTemplate
      *
      * @var string
      */
-    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendPayrollSync';
+    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendNominaSync';
 
     /**
      * Required properties.
@@ -48,12 +48,12 @@ class SendPayrollSync extends Template implements CreateTemplate
         return $this->templateXMLSOAP = <<<XML
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wcf="http://wcf.dian.colombia">
     <soap:Body>
-        <wcf:SendPayrollSync>
+        <wcf:SendNominaSync>
             <!--Optional:-->
             <wcf:fileName>{$this->fileName}</wcf:fileName>
             <!--Optional:-->
             <wcf:contentFile>{$this->contentFile}</wcf:contentFile>
-        </wcf:SendPayrollSync>
+        </wcf:SendNominaSync>
     </soap:Body>
 </soap:Envelope>
 XML;
