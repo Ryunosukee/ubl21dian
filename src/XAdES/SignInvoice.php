@@ -517,7 +517,7 @@ class SignInvoice extends Sign
     private function cune()
     {
         $xmlStr = $this->domXPath->document->saveXML();
-        $this->getTag('InformacionGeneral', 0, 'CUNE', hash('sha384', "{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}{$this->getTag('InformacionGeneral', 0, 'FechaGen')}{$this->getTag('InformacionGeneral', 0, 'HoraGen')}{$this->getTag('DevengadosTotal', 0)->nodeValue}{$this->getTag('DeduccionesTotal', 0)->nodeValue}{$this->getTag('ComprobanteTotal', 0)->nodeValue}{$this->valueXML($xmlStr, '/NominaIndividual/Empleador/NIT/')}{$this->valueXML($xmlStr, '/NominaIndividual/Trabajador/NumeroDocumento/')}{$this->getTag('InformacionGeneral', 0, 'TipoXML')}{$this->getTag('InformacionGeneral', 0, 'Ambiente')}"));
+        $this->getTag('InformacionGeneral', 0, 'CUNE', hash('sha384', "{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}{$this->getTag('InformacionGeneral', 0, 'FechaGen')}{$this->getTag('InformacionGeneral', 0, 'HoraGen')}{$this->getTag('DevengadosTotal', 0)->nodeValue}{$this->getTag('DeduccionesTotal', 0)->nodeValue}{$this->getTag('ComprobanteTotal', 0)->nodeValue}{$this->getTag('ProveedorXML', 0, 'NIT')}{$this->getTag('Trabajador', 0, 'NumeroDocumento')}{$this->getTag('InformacionGeneral', 0, 'TipoXML')}{$this->pin}{$this->getTag('InformacionGeneral', 0, 'Ambiente')}"));
         $this->getTag('CodigoQR', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUNE(), $this->getTag('CodigoQR', 0)->nodeValue);
     }
 
