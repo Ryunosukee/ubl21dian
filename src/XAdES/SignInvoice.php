@@ -447,9 +447,9 @@ class SignInvoice extends Sign
     private function setCUNE()
     {
         // Register name space
-        foreach ($this->ns as $key => $value) {
-            $this->domXPath->registerNameSpace($key, $value);
-        }
+//        foreach ($this->ns as $key => $value) {
+//            $this->domXPath->registerNameSpace($key, $value);
+//        }
 
         $this->cune();
     }

@@ -68,7 +68,6 @@ abstract class Sign
             $this->loadXML();
             $this->xml = $this->domDocument->saveXML();
         }
-
         return $this;
     }
 }
