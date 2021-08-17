@@ -192,7 +192,7 @@ class SignInvoice extends Sign
         // Digest value xml clean
         $this->digestValueXML();
 
-        if(strpos($this->xmlString, '</NominaIndividual>'))
+        if(strpos($this->xmlString, '</NominaIndividual>') || strpos($this->xmlString, '</AttachedDocument>'))
             $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(0);
         else{
             if(strpos($this->xmlString, 'www.minsalud.gov.co'))
@@ -357,7 +357,6 @@ class SignInvoice extends Sign
 
         $this->digestValueXML = $this->domDocument->createElement('ds:DigestValue', $this->DigestValueXML);
         $this->referenceXML->appendChild($this->digestValueXML);
-
         $this->domDocumentReferenceKeyInfoC14N = new DOMDocument($this->version, $this->encoding);
         $this->domDocumentReferenceKeyInfoC14N->loadXML(str_replace('<ds:KeyInfo ', "<ds:KeyInfo {$this->joinArray($this->ns)} ", $this->domDocument->saveXML($this->keyInfo)));
 
@@ -370,7 +369,6 @@ class SignInvoice extends Sign
         $this->digestMethodKeyInfo = $this->domDocument->createElement('ds:DigestMethod');
         $this->digestMethodKeyInfo->setAttribute('Algorithm', $this->algorithm['algorithm']);
         $this->referenceKeyInfo->appendChild($this->digestMethodKeyInfo);
-
         $this->digestValueKeyInfo = $this->domDocument->createElement('ds:DigestValue', $this->DigestValueKeyInfo);
         $this->referenceKeyInfo->appendChild($this->digestValueKeyInfo);
 
@@ -447,9 +445,9 @@ class SignInvoice extends Sign
     private function setCUNE()
     {
         // Register name space
-//        foreach ($this->ns as $key => $value) {
-//            $this->domXPath->registerNameSpace($key, $value);
-//        }
+        foreach ($this->ns as $key => $value) {
+            $this->domXPath->registerNameSpace($key, $value);
+        }
 
         $this->cune();
     }
