@@ -181,7 +181,7 @@ class SignInvoice extends Sign
         $this->softwareSecurityCode();
 
         // UUID
-        if(strpos($this->xmlString, '</NominaIndividual>'))
+        if(strpos($this->xmlString, '</NominaIndividual>') || strpos($this->xmlString, '</NominaIndividualDeAjuste>'))
             $this->setCUNE();
         else
             if(strpos($this->xmlString, '</ApplicationResponse>'))
@@ -192,7 +192,7 @@ class SignInvoice extends Sign
         // Digest value xml clean
         $this->digestValueXML();
 
-        if(strpos($this->xmlString, '</NominaIndividual>') || strpos($this->xmlString, '</AttachedDocument>'))
+        if(strpos($this->xmlString, '</NominaIndividual>') || strpos($this->xmlString, '</NominaIndividualDeAjuste>') || strpos($this->xmlString, '</AttachedDocument>'))
             $this->extensionContentSing = $this->domDocument->documentElement->getElementsByTagName('ExtensionContent')->item(0);
         else{
             if(strpos($this->xmlString, 'www.minsalud.gov.co'))
@@ -414,7 +414,7 @@ class SignInvoice extends Sign
         if (is_null($this->softwareID) || is_null($this->pin)) {
             return;
         }
-        if($this->valueXML($this->domXPath->document->saveXML(), "/NominaIndividual/ProveedorXML/")){
+        if($this->valueXML($this->domXPath->document->saveXML(), "/NominaIndividual/ProveedorXML/") || $this->valueXML($this->domXPath->document->saveXML(), "/NominaIndividualDeAjuste/ProveedorXML/")){
             $this->getTag('ProveedorXML', 0, 'SoftwareSC', hash('sha384', "{$this->softwareID}{$this->pin}{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}"));
         }
         else
@@ -453,7 +453,7 @@ class SignInvoice extends Sign
     }
 
     /**
-     * set CUNE.
+     * set CUDEEVENT.
      */
     private function setCUDEEVENT()
     {
@@ -515,8 +515,20 @@ class SignInvoice extends Sign
     private function cune()
     {
         $xmlStr = $this->domXPath->document->saveXML();
-        $this->getTag('InformacionGeneral', 0, 'CUNE', hash('sha384', "{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}{$this->getTag('InformacionGeneral', 0, 'FechaGen')}{$this->getTag('InformacionGeneral', 0, 'HoraGen')}{$this->getTag('DevengadosTotal', 0)->nodeValue}{$this->getTag('DeduccionesTotal', 0)->nodeValue}{$this->getTag('ComprobanteTotal', 0)->nodeValue}{$this->getTag('ProveedorXML', 0, 'NIT')}{$this->getTag('Trabajador', 0, 'NumeroDocumento')}{$this->getTag('InformacionGeneral', 0, 'TipoXML')}{$this->pin}{$this->getTag('InformacionGeneral', 0, 'Ambiente')}"));
-        $this->getTag('CodigoQR', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUNE(), $this->getTag('CodigoQR', 0)->nodeValue);
+        if(strpos($xmlStr, '</NominaIndividual>')){
+            $this->getTag('InformacionGeneral', 0, 'CUNE', hash('sha384', "{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}{$this->getTag('InformacionGeneral', 0, 'FechaGen')}{$this->getTag('InformacionGeneral', 0, 'HoraGen')}{$this->getTag('DevengadosTotal', 0)->nodeValue}{$this->getTag('DeduccionesTotal', 0)->nodeValue}{$this->getTag('ComprobanteTotal', 0)->nodeValue}{$this->getTag('ProveedorXML', 0, 'NIT')}{$this->getTag('Trabajador', 0, 'NumeroDocumento')}{$this->getTag('InformacionGeneral', 0, 'TipoXML')}{$this->pin}{$this->getTag('InformacionGeneral', 0, 'Ambiente')}"));
+            $this->getTag('CodigoQR', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUNE(), $this->getTag('CodigoQR', 0)->nodeValue);
+        }
+        else{
+            if(strpos($xmlStr, '</Eliminar>')){
+                $this->getTag('InformacionGeneral', 0, 'CUNE', hash('sha384', "{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}{$this->getTag('InformacionGeneral', 0, 'FechaGen')}{$this->getTag('InformacionGeneral', 0, 'HoraGen')}"."0.000.000.00"."{$this->getTag('Empleador', 0, 'NIT')}"."0"."{$this->getTag('InformacionGeneral', 0, 'TipoXML')}{$this->pin}{$this->getTag('InformacionGeneral', 0, 'Ambiente')}"));
+                $this->getTag('CodigoQR', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUNE(), $this->getTag('CodigoQR', 0)->nodeValue);
+            }
+            else{
+                $this->getTag('InformacionGeneral', 0, 'CUNE', hash('sha384', "{$this->getTag('NumeroSecuenciaXML', 0, 'Numero')}{$this->getTag('InformacionGeneral', 0, 'FechaGen')}{$this->getTag('InformacionGeneral', 0, 'HoraGen')}"."0.000.000.00"."{$this->getTag('Empleador', 0, 'NIT')}"."0"."{$this->getTag('InformacionGeneral', 0, 'TipoXML')}{$this->pin}{$this->getTag('InformacionGeneral', 0, 'Ambiente')}"));
+                $this->getTag('CodigoQR', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUNE(), $this->getTag('CodigoQR', 0)->nodeValue);
+            }
+       }
     }
 
     public function ConsultarCUNE()

@@ -13,7 +13,7 @@ class SignPayroll extends SignInvoice
      * @var array
      */
 
-     public $ns = [
+    public $ns = [
         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
         'xmlns:ds' => SignInvoice::XMLDSIG,
         'xmlns:xades' => 'http://uri.etsi.org/01903/v1.3.2#',
