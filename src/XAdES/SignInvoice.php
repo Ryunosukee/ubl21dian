@@ -501,12 +501,19 @@ class SignInvoice extends Sign
     private function cudeevent()
     {
         $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:SenderParty/cac:PartyTaxScheme/cbc:CompanyID")->nodeValue}{$this->getQuery("cac:ReceiverParty/cac:PartyTaxScheme/cbc:CompanyID")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:Response/cbc:ResponseCode")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:DocumentReference/cbc:ID")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:DocumentReference/cbc:DocumentTypeCode")->nodeValue}{$this->pin}");
+        $this->getTag('QRCode', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUFEEVENT(), $this->getTag('QRCode', 0)->nodeValue);
     }
 
     public function ConsultarCUDEEVENT()
     {
         if (!is_null($this->pin))
             return $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:SenderParty/cac:PartyTaxScheme/cbc:CompanyID")->nodeValue}{$this->getQuery("cac:ReceiverParty/cac:PartyTaxScheme/cbc:CompanyID")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:Response/cbc:ResponseCode")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:DocumentReference/cbc:ID")->nodeValue}{$this->getQuery("cac:DocumentResponse/cac:DocumentReference/cbc:DocumentTypeCode")->nodeValue}{$this->pin}");
+    }
+
+    public function ConsultarCUFEEVENT()
+    {
+        if (!is_null($this->pin))
+            return $this->getTag('UUID', 1)->nodeValue;
     }
 
     /**
