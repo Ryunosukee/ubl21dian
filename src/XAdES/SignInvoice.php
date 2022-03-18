@@ -117,7 +117,7 @@ class SignInvoice extends Sign
         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
         'xmlns:xades141' => 'http://uri.etsi.org/01903/v1.4.1#',
         'xmlns:xades' => 'http://uri.etsi.org/01903/v1.3.2#',
-        'xmlns:ds' => self::XMLDSIG,
+        'xmlns:ds' => self::XMLDSIG
     ];
 
     /**
@@ -360,8 +360,38 @@ class SignInvoice extends Sign
         $this->domDocumentReferenceKeyInfoC14N = new DOMDocument($this->version, $this->encoding);
         $this->domDocumentReferenceKeyInfoC14N->loadXML(str_replace('<ds:KeyInfo ', "<ds:KeyInfo {$this->joinArray($this->ns)} ", $this->domDocument->saveXML($this->keyInfo)));
 
-        $this->DigestValueKeyInfo = base64_encode(hash($this->algorithm['hash'], $this->domDocumentReferenceKeyInfoC14N->C14N(), true));
+        //=========================== PARA PODER CANONIZAR NOMINA ELECTRONICA Y NOMINA DE AJUSTE ====================================================\\
+        if(strpos($this->xmlString, '</NominaIndividual>') || strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+            $CopyOfdomDocumentReferenceKeyInfoC14N = $this->domDocumentReferenceKeyInfoC14N->saveXML();
+            if(strpos($this->xmlString, '</NominaIndividual>')){
+                $SearchNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"';
+                $ReplacementNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"';
+            }
+            else
+                if(strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+                    $SearchNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                    $ReplacementNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                }
+            $value = str_replace($SearchNS, $ReplacementNS, $this->domDocumentReferenceKeyInfoC14N->saveXML());
+            $this->domDocumentReferenceKeyInfoC14N->loadXML($value);
 
+            if(strpos($this->xmlString, '</NominaIndividual>')){
+                $SearchNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"';
+                $ReplacementNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"';
+            }
+            else
+                if(strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+                    $SearchNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                    $ReplacementNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                }
+            $value = str_replace($SearchNS, $ReplacementNS, $this->domDocumentReferenceKeyInfoC14N->C14N());
+            $this->domDocumentReferenceKeyInfoC14N->loadXML($CopyOfdomDocumentReferenceKeyInfoC14N);
+
+            $this->DigestValueKeyInfo = base64_encode(hash($this->algorithm['hash'], $value, true));
+        }
+        //=================================================================== FIN ==================================================================\\
+        else
+            $this->DigestValueKeyInfo = base64_encode(hash($this->algorithm['hash'], $this->domDocumentReferenceKeyInfoC14N->C14N(), true));
         $this->referenceKeyInfo = $this->domDocument->createElement('ds:Reference');
         $this->referenceKeyInfo->setAttribute('URI', "#{$this->KeyInfoID}");
         $this->signedInfo->appendChild($this->referenceKeyInfo);
@@ -384,7 +414,38 @@ class SignInvoice extends Sign
         $this->domDocumentSignedPropertiesC14N = new DOMDocument($this->version, $this->encoding);
         $this->domDocumentSignedPropertiesC14N->loadXML(str_replace('<xades:SignedProperties ', "<xades:SignedProperties {$this->joinArray($this->ns)} ", $this->domDocument->saveXML($this->signedProperties)));
 
-        $this->DigestValueSignedProperties = base64_encode(hash($this->algorithm['hash'], $this->domDocumentSignedPropertiesC14N->C14N(), true));
+        //=========================== PARA PODER CANONIZAR NOMINA ELECTRONICA Y NOMINA DE AJUSTE ====================================================\\
+        if(strpos($this->xmlString, '</NominaIndividual>') || strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+            $CopyOfdomDocumentSignedPropertiesC14N = $this->domDocumentSignedPropertiesC14N->saveXML();
+            if(strpos($this->xmlString, '</NominaIndividual>')){
+                $SearchNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"';
+                $ReplacementNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"';
+            }
+            else
+                if(strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+                    $SearchNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                    $ReplacementNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                }
+            $value = str_replace($SearchNS, $ReplacementNS, $this->domDocumentSignedPropertiesC14N->saveXML());
+            $this->domDocumentSignedPropertiesC14N->loadXML($value);
+
+            if(strpos($this->xmlString, '</NominaIndividual>')){
+                $SearchNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"';
+                $ReplacementNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"';
+            }
+            else
+                if(strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+                    $SearchNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                    $ReplacementNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                }
+            $value = str_replace($SearchNS, $ReplacementNS, $this->domDocumentSignedPropertiesC14N->C14N());
+            $this->domDocumentSignedPropertiesC14N->loadXML($CopyOfdomDocumentSignedPropertiesC14N);
+
+            $this->DigestValueSignedProperties = base64_encode(hash($this->algorithm['hash'], $value, true));
+        }
+        //=================================================================== FIN ==================================================================\\
+        else
+            $this->DigestValueSignedProperties = base64_encode(hash($this->algorithm['hash'], $this->domDocumentSignedPropertiesC14N->C14N(), true));
 
         $this->digestValueSignedProperties = $this->domDocument->createElement('ds:DigestValue', $this->DigestValueSignedProperties);
         $this->referenceSignedProperties->appendChild($this->digestValueSignedProperties);
@@ -393,7 +454,38 @@ class SignInvoice extends Sign
         $this->domDocumentSignatureValueC14N = new DOMDocument($this->version, $this->encoding);
         $this->domDocumentSignatureValueC14N->loadXML(str_replace('<ds:SignedInfo', "<ds:SignedInfo {$this->joinArray($this->ns)} ", $this->domDocument->saveXML($this->signedInfo)));
 
-        openssl_sign($this->domDocumentSignatureValueC14N->C14N(), $this->resultSignature, $this->certs['pkey'], $this->algorithm['sign']);
+        //=========================== PARA PODER CANONIZAR NOMINA ELECTRONICA Y NOMINA DE AJUSTE ====================================================\\
+        if(strpos($this->xmlString, '</NominaIndividual>') || strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+            $CopyOfdomDocumentSignatureValueC14N = $this->domDocumentSignatureValueC14N->saveXML();
+            if(strpos($this->xmlString, '</NominaIndividual>')){
+                $SearchNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"';
+                $ReplacementNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"';
+            }
+            else
+                if(strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+                    $SearchNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                    $ReplacementNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                }
+            $value = str_replace($SearchNS, $ReplacementNS, $this->domDocumentSignatureValueC14N->saveXML());
+            $this->domDocumentSignatureValueC14N->loadXML($value);
+
+            if(strpos($this->xmlString, '</NominaIndividual>')){
+                $SearchNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"';
+                $ReplacementNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"';
+            }
+            else
+                if(strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+                    $SearchNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                    $ReplacementNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                }
+            $value = str_replace($SearchNS, $ReplacementNS, $this->domDocumentSignatureValueC14N->C14N());
+            $this->domDocumentSignatureValueC14N->loadXML($CopyOfdomDocumentSignatureValueC14N);
+
+            openssl_sign($value, $this->resultSignature, $this->certs['pkey'], $this->algorithm['sign']);
+        }
+        //=================================================================== FIN ==================================================================\\
+        else
+            openssl_sign($this->domDocumentSignatureValueC14N->C14N(), $this->resultSignature, $this->certs['pkey'], $this->algorithm['sign']);
 
         $this->signatureValue->nodeValue = base64_encode($this->resultSignature);
     }
@@ -403,7 +495,38 @@ class SignInvoice extends Sign
      */
     private function digestValueXML()
     {
-        $this->DigestValueXML = base64_encode(hash($this->algorithm['hash'], $this->domDocument->C14N(), true));
+        //=========================== PARA PODER CANONIZAR NOMINA ELECTRONICA Y NOMINA DE AJUSTE ====================================================\\
+        if(strpos($this->xmlString, '</NominaIndividual>') || strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+            $CopyOfdomDocument = $this->domDocument->saveXML();
+            if(strpos($this->xmlString, '</NominaIndividual>')){
+                $SearchNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"';
+                $ReplacementNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"';
+            }
+            else
+                if(strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+                    $SearchNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                    $ReplacementNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                }
+            $value = str_replace($SearchNS,$ReplacementNS,$this->domDocument->saveXML());
+            $this->domDocument->loadXML($value);
+
+            if(strpos($this->xmlString, '</NominaIndividual>')){
+                $SearchNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividual"';
+                $ReplacementNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividual"';
+            }
+            else
+                if(strpos($this->xmlString, '</NominaIndividualDeAjuste>')){
+                    $SearchNS = 'xmlns="urn:dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                    $ReplacementNS = 'xmlns="dian:gov:co:facturaelectronica:NominaIndividualDeAjuste"';
+                }
+            $value = str_replace($SearchNS,$ReplacementNS,$this->domDocument->C14N());
+            $this->domDocument->loadXML($CopyOfdomDocument);
+
+            $this->DigestValueXML = base64_encode(hash($this->algorithm['hash'], $value, true));
+        }
+        //=================================================================== FIN ==================================================================\\
+        else
+            $this->DigestValueXML = base64_encode(hash($this->algorithm['hash'], $this->domDocument->C14N(), true));
     }
 
     /**
