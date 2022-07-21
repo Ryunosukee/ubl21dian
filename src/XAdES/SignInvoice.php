@@ -356,6 +356,7 @@ class SignInvoice extends Sign
         $this->referenceXML->appendChild($this->digestMethodXML);
 
         $this->digestValueXML = $this->domDocument->createElement('ds:DigestValue', $this->DigestValueXML);
+
         $this->referenceXML->appendChild($this->digestValueXML);
         $this->domDocumentReferenceKeyInfoC14N = new DOMDocument($this->version, $this->encoding);
         $this->domDocumentReferenceKeyInfoC14N->loadXML(str_replace('<ds:KeyInfo ', "<ds:KeyInfo {$this->joinArray($this->ns)} ", $this->domDocument->saveXML($this->keyInfo)));
@@ -392,6 +393,7 @@ class SignInvoice extends Sign
         //=================================================================== FIN ==================================================================\\
         else
             $this->DigestValueKeyInfo = base64_encode(hash($this->algorithm['hash'], $this->domDocumentReferenceKeyInfoC14N->C14N(), true));
+
         $this->referenceKeyInfo = $this->domDocument->createElement('ds:Reference');
         $this->referenceKeyInfo->setAttribute('URI', "#{$this->KeyInfoID}");
         $this->signedInfo->appendChild($this->referenceKeyInfo);
@@ -526,7 +528,31 @@ class SignInvoice extends Sign
         }
         //=================================================================== FIN ==================================================================\\
         else
-            $this->DigestValueXML = base64_encode(hash($this->algorithm['hash'], $this->domDocument->C14N(), true));
+            if(strpos($this->xmlString, '</AttachedDocument>')){
+                $CopyOfdomDocument = $this->domDocument->saveXML();
+
+                $SearchNS = $this->ValueXML($this->domDocument->saveXML(), "/AttachedDocument/cac:Attachment/cac:ExternalReference/cbc:Description/");
+                $ReplacementNS = $this->ValueXML(" - ".$this->domDocument->C14N(), "/AttachedDocument/cac:Attachment/cac:ExternalReference/cbc:Description/");
+
+                $SearchNS2 = $this->ValueXML($this->domDocument->saveXML(), "/AttachedDocument/cac:ParentDocumentLineReference/cac:DocumentReference/cac:Attachment/cbc:Description/");
+                $ReplacementNS2 = $this->ValueXML(" - ".$this->domDocument->C14N(), "/AttachedDocument/cac:ParentDocumentLineReference/cac:DocumentReference/cac:Attachment/cbc:Description/");
+
+                $value = str_replace($SearchNS2,$ReplacementNS2,str_replace($SearchNS,$ReplacementNS,$this->domDocument->saveXML()));
+
+                $this->domDocument->loadXML($value);
+
+                $SearchNS = $this->ValueXML($this->domDocument->C14N(), "/AttachedDocument/cac:Attachment/cac:ExternalReference/cbc:Description/");
+                $ReplacementNS = $this->ValueXML(" - ".$this->domDocument->saveXML(), "/AttachedDocument/cac:Attachment/cac:ExternalReference/cbc:Description/");
+
+                $SearchNS2 = $this->ValueXML($this->domDocument->C14N(), "/AttachedDocument/cac:ParentDocumentLineReference/cac:DocumentReference/cac:Attachment/cbc:Description/");
+                $ReplacementNS2 = $this->ValueXML(" - ".$this->domDocument->saveXML(), "/AttachedDocument/cac:ParentDocumentLineReference/cac:DocumentReference/cac:Attachment/cbc:Description/");
+
+                $value = str_replace($SearchNS2,$ReplacementNS2,str_replace($SearchNS,$ReplacementNS,$this->domDocument->C14N()));
+                $this->domDocument->loadXML($CopyOfdomDocument);
+                $this->DigestValueXML = base64_encode(hash($this->algorithm['hash'], $value, true));
+            }
+            else
+                $this->DigestValueXML = base64_encode(hash($this->algorithm['hash'], $this->domDocument->C14N(), true));
     }
 
     /**
@@ -555,7 +581,10 @@ class SignInvoice extends Sign
         }
 
         if ((!is_null($this->pin)) && (is_null($this->technicalKey))) {
-            $this->cude();
+            if(strpos($this->xmlString, 'DIAN 2.1: documento soporte en adquisiciones efectuadas a no obligados a facturar.'))
+                $this->cuds();
+            else
+                $this->cude();
         }
         if (!is_null($this->technicalKey)) {
             $this->cufe();
@@ -586,6 +615,21 @@ class SignInvoice extends Sign
         }
 
         $this->cudeevent();
+    }
+
+    /**
+     * CUDS.
+     */
+    private function cuds()
+    {
+        $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:{$this->groupOfTotals}/cbc:LineExtensionAmount")->nodeValue}01".($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=01]/cbc:TaxAmount', false)->nodeValue ?? '0.00')."{$this->getQuery("cac:{$this->groupOfTotals}/cbc:PayableAmount")->nodeValue}{$this->getQuery('cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->getQuery('cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->pin}{$this->getTag('ProfileExecutionID', 0)->nodeValue}");
+        $this->getTag('QRCode', 0)->nodeValue = str_replace('-----CUFECUDE-----', $this->ConsultarCUDS(), $this->getTag('QRCode', 0)->nodeValue);
+    }
+
+    public function ConsultarCUDS()
+    {
+        if (!is_null($this->pin))
+            return $this->getTag('UUID', 0)->nodeValue = hash('sha384', "{$this->getTag('ID', 0)->nodeValue}{$this->getTag('IssueDate', 0)->nodeValue}{$this->getTag('IssueTime', 0)->nodeValue}{$this->getQuery("cac:{$this->groupOfTotals}/cbc:LineExtensionAmount")->nodeValue}01".($this->getQuery('cac:TaxTotal[cac:TaxSubtotal/cac:TaxCategory/cac:TaxScheme/cbc:ID=01]/cbc:TaxAmount', false)->nodeValue ?? '0.00')."{$this->getQuery("cac:{$this->groupOfTotals}/cbc:PayableAmount")->nodeValue}{$this->getQuery('cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->getQuery('cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID')->nodeValue}{$this->pin}{$this->getTag('ProfileExecutionID', 0)->nodeValue}");
     }
 
     /**
