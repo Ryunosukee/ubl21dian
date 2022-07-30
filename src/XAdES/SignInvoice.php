@@ -176,7 +176,6 @@ class SignInvoice extends Sign
 
         // DOMX path
         $this->domXPath = new DOMXPath($this->domDocument);
-
         // Software security code
         $this->softwareSecurityCode();
 
@@ -581,7 +580,7 @@ class SignInvoice extends Sign
         }
 
         if ((!is_null($this->pin)) && (is_null($this->technicalKey))) {
-            if(strpos($this->xmlString, 'DIAN 2.1: documento soporte en adquisiciones efectuadas a no obligados a facturar.'))
+            if(strpos($this->xmlString, 'DIAN 2.1: documento soporte en adquisiciones efectuadas a no obligados a facturar.') || strpos($this->xmlString, 'DIAN 2.1: Nota de ajuste al documento soporte en adquisiciones efectuadas a sujetos no obligados a expedir factura o documento equivalente'))
                 $this->cuds();
             else
                 $this->cude();
