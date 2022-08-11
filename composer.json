@@ -1,8 +1,8 @@
 {
-    "name": "ubl21dian/torresoftware",
+    "name": "ubl21dian/dcorreah",
     "type": "library",
     "description": "Core for electronic invoicing pre-validation - DIAN UBL 2.1",
-    "homepage": "http://facturalatam.com",
+    "homepage": "https://github.com/Ryunosukee",
     "keywords": [
         "soap dian",
         "web service",
@@ -12,15 +12,14 @@
         "core"
     ],
     "support": {
-        "issues": "https://github.com/torresoftware/ubl21dian/issues",
-        "source": "https://github.com/torresoftware/ubl21dian"
+        "issues": "https://github.com/Ryunosukee/ubl21dian/issues",
+        "source": "https://github.com/Ryunosukee/ubl21dian"
     },
     "license": "LGPL-3.0",
     "authors": [
         {
-            "name": "facturalatam",
-            "email": "soporte@facturalatam.com",
-            "homepage": "https://facturalatam.com"
+            "name": "dcorreah",
+            "homepage": "https://github.com/Ryunosukee"
         }
     ],
     "minimum-stability": "stable",
