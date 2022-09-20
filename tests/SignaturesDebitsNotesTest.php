@@ -1,8 +1,9 @@
 <?php
 
-namespace ubl21dian\Tests;
+namespace ubl21dian\test;
 
 use DOMDocument;
+use ubl21dian\test\TestCase;
 use ubl21dian\XAdES\SignDebitNote;
 
 /**
@@ -398,9 +399,9 @@ XML;
     public function it_generates_signature_XAdES_sha1()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $signCreditNote = new SignDebitNote($pathCertificate, $passwors, $this->xmlString, SignDebitNote::ALGO_SHA1);
+        $signCreditNote = new SignDebitNote($pathCertificate, $password, $this->xmlString, SignDebitNote::ALGO_SHA1);
 
         $domDocumentValidate = new DOMDocument();
         $domDocumentValidate->validateOnParse = true;
@@ -414,9 +415,9 @@ XML;
     public function it_generates_signature_XAdES_sha256()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $signCreditNote = new SignDebitNote($pathCertificate, $passwors, $this->xmlString);
+        $signCreditNote = new SignDebitNote($pathCertificate, $password, $this->xmlString);
 
         $domDocumentValidate = new DOMDocument();
         $domDocumentValidate->validateOnParse = true;
@@ -430,9 +431,9 @@ XML;
     public function it_generates_signature_XAdES_sha512()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $signCreditNote = new SignDebitNote($pathCertificate, $passwors, $this->xmlString, SignDebitNote::ALGO_SHA512);
+        $signCreditNote = new SignDebitNote($pathCertificate, $password, $this->xmlString, SignDebitNote::ALGO_SHA512);
 
         $domDocumentValidate = new DOMDocument();
         $domDocumentValidate->validateOnParse = true;
@@ -446,9 +447,9 @@ XML;
     public function it_generates_signature_XAdES_and_software_security_code()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $signCreditNote = new SignDebitNote($pathCertificate, $passwors);
+        $signCreditNote = new SignDebitNote($pathCertificate, $password);
 
         // Software security code
         $signCreditNote->softwareID = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
@@ -468,9 +469,9 @@ XML;
     public function it_generates_signature_XAdES_and_calculate_cude()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $signCreditNote = new SignDebitNote($pathCertificate, $passwors);
+        $signCreditNote = new SignDebitNote($pathCertificate, $password);
 
         // CUDE
         $signCreditNote->pin = 'xxxxx';

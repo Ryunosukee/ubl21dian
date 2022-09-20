@@ -1,6 +1,6 @@
 <?php
 
-namespace ubl21dian\Tests;
+namespace ubl21dian\test;
 
 use DOMDocument;
 use ubl21dian\Templates\SOAP\GetStatus;
@@ -17,9 +17,9 @@ class TemplatesTest extends TestCase
     public function it_generates_template_send_bill_async()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $sendBillAsync = new SendBillAsync($pathCertificate, $passwors);
+        $sendBillAsync = new SendBillAsync($pathCertificate, $password);
         $sendBillAsync->fileName = 'Test.xml';
         $sendBillAsync->contentFile = 'base64';
 
@@ -40,9 +40,9 @@ class TemplatesTest extends TestCase
     public function it_generates_template_send_test_set_async()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $sendTestSetAsync = new SendTestSetAsync($pathCertificate, $passwors);
+        $sendTestSetAsync = new SendTestSetAsync($pathCertificate, $password);
         $sendTestSetAsync->fileName = 'Test.xml';
         $sendTestSetAsync->contentFile = 'base64';
         $sendTestSetAsync->testSetId = 'xxxxxxxxxxxxxxxxxxx';
@@ -65,9 +65,9 @@ class TemplatesTest extends TestCase
     public function it_generates_template_get_status_zip()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $getStatusZip = new GetStatusZip($pathCertificate, $passwors);
+        $getStatusZip = new GetStatusZip($pathCertificate, $password);
         $getStatusZip->trackId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
 
         // Sign
@@ -86,9 +86,9 @@ class TemplatesTest extends TestCase
     public function it_generates_template_get_status()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $getStatus = new GetStatus($pathCertificate, $passwors);
+        $getStatus = new GetStatus($pathCertificate, $password);
         $getStatus->trackId = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
 
         // Sign

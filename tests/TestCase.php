@@ -1,6 +1,6 @@
 <?php
 
-namespace ubl21dian\Tests;
+namespace ubl21dian\test;
 
 /**
  * Test case.

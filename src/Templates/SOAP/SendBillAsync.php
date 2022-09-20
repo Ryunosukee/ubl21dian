@@ -15,27 +15,25 @@ class SendBillAsync extends Template implements CreateTemplate
      *
      * @var string
      */
-    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendBillAsync';
+    public string $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendBillAsync';
 
     /**
      * Required properties.
      *
      * @var array
      */
-    protected $requiredProperties = [
+    protected array $requiredProperties = [
         'fileName',
         'contentFile',
     ];
 
     /**
-     * Construct.
-     *
-     * @param string $pathCertificate
-     * @param string $passwors
+     * @param $pathCertificate
+     * @param $password
      */
-    public function __construct($pathCertificate, $passwors)
+    public function __construct($pathCertificate, $password)
     {
-        parent::__construct($pathCertificate, $passwors);
+        parent::__construct($pathCertificate, $password);
     }
 
     /**
@@ -43,7 +41,7 @@ class SendBillAsync extends Template implements CreateTemplate
      *
      * @return string
      */
-    public function createTemplate()
+    public function createTemplate(): string
     {
         return $this->templateXMLSOAP = <<<XML
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wcf="http://wcf.dian.colombia">

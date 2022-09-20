@@ -14,44 +14,46 @@ trait DIANTrait
      *
      * @var string
      */
-    public $version = '1.0';
+    public string $version = '1.0';
 
     /**
      * Encoding.
      *
      * @var string
      */
-    public $encoding = 'UTF-8';
+    public string $encoding = 'UTF-8';
 
     /**
      * Certs.
      *
      * @var array
      */
-    protected $certs;
+    protected array $certs;
 
     /**
      * Attributes.
      *
      * @var array
      */
-    protected $attributes;
+    protected array $attributes;
 
     /**
      * Read certs.
+     * @throws Exception
      */
     protected function readCerts()
     {
-        if (is_null($this->pathCertificate) || is_null($this->passwors)) {
+        if (is_null($this->pathCertificate) || is_null($this->password)) {
             throw new Exception('Class '.get_class($this).': requires the certificate path and password.');
         }
-        if (!openssl_pkcs12_read(file_get_contents($this->pathCertificate), $this->certs, $this->passwors)) {
+        if (!openssl_pkcs12_read(file_get_contents($this->pathCertificate), $this->certs, $this->password)) {
             throw new Exception('Class '.get_class($this).': Failure signing data: '.openssl_error_string());
         }
     }
 
     /**
      * X509 export.
+     * @throws Exception
      */
     protected function x509Export()
     {
@@ -75,11 +77,11 @@ trait DIANTrait
     }
 
     /**
-     * Remove child.
-     *
      * @param string $tagName
+     * @param int $item
+     * @return void
      */
-    protected function removeChild($tagName, $item = 0)
+    protected function removeChild(string $tagName, int $item = 0)
     {
         if (is_null($tag = $this->domDocument->documentElement->getElementsByTagName($tagName)->item($item))) {
             return;
@@ -89,14 +91,14 @@ trait DIANTrait
     }
 
     /**
-     * Get tag.
-     *
-     * @param string $tagName
-     * @param int    $item
-     *
-     * @return mixed
+     * @param $tagName
+     * @param int $item
+     * @param $attribute
+     * @param $attribute_value
+     * @return void
+     * @throws Exception
      */
-    protected function getTag($tagName, $item = 0, $attribute = NULL, $attribute_value = NULL)
+    protected function getTag($tagName, int $item = 0, $attribute = NULL, $attribute_value = NULL)
     {
         $tag = $this->domDocument->documentElement->getElementsByTagName($tagName);
 
@@ -115,6 +117,11 @@ trait DIANTrait
             return $tag->item($item);
     }
 
+    /**
+     * @param $stringXML
+     * @param $xpath
+     * @return bool|string|null
+     */
     protected function ValueXML($stringXML, $xpath)
     {
         if(substr($xpath, 0, 1) != '/')
@@ -135,15 +142,13 @@ trait DIANTrait
     }
 
     /**
-     * Get query.
-     *
-     * @param string $query
-     * @param bool   $validate
-     * @param int    $item
-     *
+     * @param $query
+     * @param bool $validate
+     * @param int $item
      * @return mixed
+     * @throws Exception
      */
-    protected function getQuery($query, $validate = true, $item = 0)
+    protected function getQuery($query, bool $validate = true, int $item = 0)
     {
         $tag = $this->domXPath->query($query);
 
@@ -161,12 +166,12 @@ trait DIANTrait
      * Join array.
      *
      * @param array  $array
-     * @param bool   $formatNS
+     * @param bool $formatNS
      * @param string $join
      *
      * @return string
      */
-    protected function joinArray(array $array, $formatNS = true, $join = ' ')
+    protected function joinArray(array $array, bool $formatNS = true, string $join = ' '): string
     {
         return implode($join, array_map(function ($value, $key) use ($formatNS) {
             return ($formatNS) ? "{$key}=\"$value\"" : "{$key}=$value";
@@ -174,10 +179,9 @@ trait DIANTrait
     }
 
     /**
-     * Set.
-     *
-     * @param any $name
-     * @param any $value
+     * @param $name
+     * @param $value
+     * @return void
      */
     public function __set($name, $value)
     {
@@ -185,11 +189,8 @@ trait DIANTrait
     }
 
     /**
-     * Get.
-     *
-     * @param any $name
-     *
-     * @return any
+     * @param $name
+     * @return mixed|void
      */
     public function __get($name)
     {

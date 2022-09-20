@@ -1,13 +1,8 @@
-# UBL 2.1 DIAN
 
-Core for electronic invoicing pre-validation - DIAN UBL 2.1.
+# UBL2.1 DIAN
 
-# UBL 2.1 DIAN DETALLE
+Nucleo de pre-validación de facturación electronica - Colombia
 
-Paquete para facturacion electronica Colombia
-
-
-# Tags
 * 1: Contiene pruebas válidas con el token de seguridad binario (SOAP) y la firma XAdES (XML) con los algoritmos sha1, sha256 y sha512.
 * 2: Contiene las plantillas principales para el consumo del servicio web, requiere curl como una dependencia.
 * 3: Se soluciona el error de canonización.
@@ -15,20 +10,48 @@ Paquete para facturacion electronica Colombia
 * 5: Licencia LGPL.
 * 6: Contiene pruebas válidas para el envío de notas de débito y el nombre del documento estándar.
 
-# Funciones
+## Características
+
 * Firma de documentos
-* Envió asincrono
-* Consulta de estado por zipkey
-* Consulta de estado por cufe
+* Envío asíncrono
+* Consulta de estado por ZIPKey
+* Consulta de estado por CUFE
 * Consulta de rangos de numeración
 * Envió de set de pruebas asíncrono
+* Consulta de eventos
 
 
-# Resources
-* [Documentation](https://facturalatam.com)
-* [Instalacion](https://docs.google.com/document/d/1WtGOfzf6hzfuC3tKC5uNlcibunUBFu8HgveXoj3_3_s/edit?usp=sharing)
-* [Uso Ejemnplos](https://docs.google.com/document/d/1xjBsWx54Jt-2mj3v9YHyBocqRggsz5H7UNV2iECbaHU/edit?usp=sharing)
+## Instalación
 
-# Actualizacion 
+Requisitos mínimos
+```bash
+php: >= 7.4
+ext-dom
+ext-xml
+ext-curl
+ext-libxml
+ext-openssl
+ext-xmlwriter
+ext-json
+```
 
+
+Instalación con composer
+```bash
+composer require dcorreah/ubl21dian
+```
+
+## Licencia
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+
+## Autores
+
+- [@TorreSoftware](https://github.com/TorreSoftware) (Agradecimientos por el proyecto inicial)
+- [@Ryunosukee](https://github.com/Ryunosukee)
+
+## Soporte
+
+Si necesitas soporte, puedes escribirme al correo electrónico strike970124@gmail.com
 

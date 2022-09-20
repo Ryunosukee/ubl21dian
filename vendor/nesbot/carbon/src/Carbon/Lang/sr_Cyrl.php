@@ -20,6 +20,9 @@
  * - Nikola Zeravcic
  * - Milos Sakovic
  */
+
+use Carbon\CarbonInterface;
+
 return [
     'year' => '{2,3,4,22,23,24,32,33,34,42,43,44,52,53,54}:count године|[0,Inf[:count година',
     'y' => ':count г.',
@@ -44,8 +47,12 @@ return [
     'week_from_now' => '{1}:count недељу|{2,3,4}:count недеље|[0,Inf[:count недеља',
     'week_ago' => '{1}:count недељу|{2,3,4}:count недеље|[0,Inf[:count недеља',
     'diff_now' => 'управо сада',
+    'diff_today' => 'данас',
+    'diff_today_regexp' => 'данас(?:\\s+у)?',
     'diff_yesterday' => 'јуче',
+    'diff_yesterday_regexp' => 'јуче(?:\\s+у)?',
     'diff_tomorrow' => 'сутра',
+    'diff_tomorrow_regexp' => 'сутра(?:\\s+у)?',
     'diff_before_yesterday' => 'прекјуче',
     'diff_after_tomorrow' => 'прекосутра',
     'formats' => [
@@ -59,7 +66,7 @@ return [
     'calendar' => [
         'sameDay' => '[данас у] LT',
         'nextDay' => '[сутра у] LT',
-        'nextWeek' => function (\Carbon\CarbonInterface $date) {
+        'nextWeek' => function (CarbonInterface $date) {
             switch ($date->dayOfWeek) {
                 case 0:
                     return '[у недељу у] LT';
@@ -72,7 +79,7 @@ return [
             }
         },
         'lastDay' => '[јуче у] LT',
-        'lastWeek' => function (\Carbon\CarbonInterface $date) {
+        'lastWeek' => function (CarbonInterface $date) {
             switch ($date->dayOfWeek) {
                 case 0:
                     return '[прошле недеље у] LT';

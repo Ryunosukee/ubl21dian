@@ -30,12 +30,12 @@ class Client
      *
      * @var string
      */
-    private $response;
+    private string $response;
 
     /**
-     * Construct.
-     *
-     * @param \Stenfrank\UBL21dian\Templates\Template $template
+     * @param Template $template
+     * @param $GuardarEn
+     * @throws Exception
      */
     public function __construct(Template $template, $GuardarEn = false)
     {
@@ -68,6 +68,7 @@ class Client
 
     /**
      * Exec.
+     * @throws Exception
      */
     private function exec()
     {
@@ -81,15 +82,15 @@ class Client
      *
      * @return string
      */
-    public function getResponse()
+    public function getResponse(): string
     {
         return $this->response;
     }
 
     /**
-     * Get response to object.
-     *
-     * @return object
+     * @param $GuardarEn
+     * @return array|mixed|object
+     * @throws Exception
      */
     public function getResponseToObject($GuardarEn = false)
     {
@@ -161,6 +162,9 @@ class Client
         return (object) $dataXML;
     }
 
+    /**
+     * @throws Exception
+     */
     public function __toString()
     {
         return json_encode($this->getResponseToObject());

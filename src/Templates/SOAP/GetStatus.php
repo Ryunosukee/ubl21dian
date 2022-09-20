@@ -15,14 +15,14 @@ class GetStatus extends Template implements CreateTemplate
      *
      * @var string
      */
-    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/GetStatus';
+    public string $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/GetStatus';
 
     /**
      * Required properties.
      *
      * @var array
      */
-    protected $requiredProperties = [
+    protected array $requiredProperties = [
         'trackId',
     ];
 
@@ -30,14 +30,13 @@ class GetStatus extends Template implements CreateTemplate
      * Construct.
      *
      * @param string $pathCertificate
-     * @param string $passwors
+     * @param string $password
      */
-    public function __construct($pathCertificate, $passwors, $Ambiente = false)
+    public function __construct($pathCertificate, $password, $Ambiente = false)
     {
-        parent::__construct($pathCertificate, $passwors);
+        parent::__construct($pathCertificate, $password);
         if($Ambiente)
           $this->To = $Ambiente;
-//          $this->To = 'https://vpfe.dian.gov.co/WcfDianCustomerServices.svc?wsdl';
     }
 
     /**
@@ -45,7 +44,7 @@ class GetStatus extends Template implements CreateTemplate
      *
      * @return string
      */
-    public function createTemplate()
+    public function createTemplate(): string
     {
         return $this->templateXMLSOAP = <<<XML
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wcf="http://wcf.dian.colombia">

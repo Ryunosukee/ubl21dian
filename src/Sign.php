@@ -2,6 +2,8 @@
 
 namespace ubl21dian;
 
+use DOMDocument;
+use Exception;
 use ubl21dian\Traits\DIANTrait;
 
 /**
@@ -12,23 +14,20 @@ abstract class Sign
     use DIANTrait;
 
     /**
-     * Abstract loadXML.
-     *
-     * @var void
+     * @return mixed
      */
     abstract protected function loadXML();
 
     /**
-     * Construct.
-     *
-     * @param string $pathCertificate
-     * @param string $passwors
-     * @param string $xmlString
+     * @param null $pathCertificate
+     * @param null $password
+     * @param null $xmlString
+     * @throws Exception
      */
-    public function __construct($pathCertificate = null, $passwors = null, $xmlString = null)
+    public function __construct($pathCertificate = null, $password = null, $xmlString = null)
     {
         $this->pathCertificate = $pathCertificate;
-        $this->passwors = $passwors;
+        $this->password = $password;
         $this->xmlString = $xmlString;
 
         $this->readCerts();
@@ -46,19 +45,16 @@ abstract class Sign
      *
      * @return DOMDocument
      */
-    public function getDocument()
+    public function getDocument(): DOMDocument
     {
         return $this->domDocument;
     }
 
     /**
-     * Sign.
-     *
-     * @param string $string
-     *
-     * @return XAdESDIAN
+     * @param $string
+     * @return $this
      */
-    public function sign($string = null)
+    public function sign($string = null): Sign
     {
         if (null != $string) {
             $this->xmlString = $string;

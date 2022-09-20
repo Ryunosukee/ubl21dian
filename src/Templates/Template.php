@@ -16,19 +16,19 @@ class Template extends SOAP
      *
      * @var string
      */
-    public $To = 'https://vpfe-hab.dian.gov.co/WcfDianCustomerServices.svc?wsdl';
+    public string $To = 'https://vpfe-hab.dian.gov.co/WcfDianCustomerServices.svc?wsdl';
 
     /**
      * Template.
      *
      * @var string
      */
-    protected $template;
+    protected string $template;
 
     /**
-     * Sign.
-     *
-     * @return \Stenfrank\UBL21dian\BinarySecurityToken\SOAP
+     * @param $string
+     * @return SOAP
+     * @throws Exception
      */
     public function sign($string = null): SOAP
     {
@@ -38,9 +38,9 @@ class Template extends SOAP
     }
 
     /**
-     * Sign to send.
-     *
-     * @return \Stenfrank\UBL21dian\Client
+     * @param $GuardarEn
+     * @return Client
+     * @throws Exception
      */
     public function signToSend($GuardarEn = false): Client
     {
@@ -53,6 +53,7 @@ class Template extends SOAP
 
     /**
      * Required properties.
+     * @throws Exception
      */
     private function requiredProperties()
     {

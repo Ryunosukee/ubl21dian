@@ -9,7 +9,8 @@
         "dian",
         "xml",
         "ubl",
-        "core"
+        "core",
+        "v2.0"
     ],
     "support": {
         "issues": "https://github.com/Ryunosukee/ubl21dian/issues",
@@ -18,23 +19,24 @@
     "license": "LGPL-3.0",
     "authors": [
         {
-            "name": "dcorreah",
+            "name": "Ryunosukee",
             "homepage": "https://github.com/Ryunosukee"
         }
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">= 5.4",
+        "php": ">= 7.4",
         "ext-dom": "*",
         "ext-xml": "*",
         "ext-curl": "*",
         "ext-libxml": "*",
         "ext-openssl": "*",
         "ext-xmlwriter": "*",
-        "nesbot/carbon": "^2.19"
+        "nesbot/carbon": "^2.62",
+        "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
         "psr-4": {

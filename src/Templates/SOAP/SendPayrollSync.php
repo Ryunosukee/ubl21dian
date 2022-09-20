@@ -15,14 +15,14 @@ class SendPayrollSync extends Template implements CreateTemplate
      *
      * @var string
      */
-    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendNominaSync';
+    public string $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/SendNominaSync';
 
     /**
      * Required properties.
      *
      * @var array
      */
-    protected $requiredProperties = [
+    protected array $requiredProperties = [
         'fileName',
         'contentFile',
     ];
@@ -31,11 +31,11 @@ class SendPayrollSync extends Template implements CreateTemplate
      * Construct.
      *
      * @param string $pathCertificate
-     * @param string $passwors
+     * @param string $password
      */
-    public function __construct($pathCertificate, $passwors)
+    public function __construct($pathCertificate, $password)
     {
-        parent::__construct($pathCertificate, $passwors);
+        parent::__construct($pathCertificate, $password);
     }
 
     /**
@@ -43,7 +43,7 @@ class SendPayrollSync extends Template implements CreateTemplate
      *
      * @return string
      */
-    public function createTemplate()
+    public function createTemplate(): string
     {
         return $this->templateXMLSOAP = <<<XML
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wcf="http://wcf.dian.colombia">

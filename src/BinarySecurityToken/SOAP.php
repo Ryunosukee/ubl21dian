@@ -2,6 +2,7 @@
 
 namespace ubl21dian\BinarySecurityToken;
 
+use DOMException;
 use Exception;
 use DOMDocument;
 use ubl21dian\Sign;
@@ -93,8 +94,8 @@ class SOAP extends Sign
      *
      * @var array
      */
-    protected $ids = [
-        'wsuBinarySecurityTokenID' => 'TORRESOFTWARE',
+    protected array $ids = [
+        'wsuBinarySecurityTokenID' => 'RYUSOFT',
         'securityTokenReferenceID' => 'STR',
         'signatureID' => 'SIG',
         'timestampID' => 'TS',
@@ -107,7 +108,7 @@ class SOAP extends Sign
      *
      * @var array
      */
-    protected $toNS = [
+    protected array $toNS = [
         'xmlns:wsa' => self::ADDRESSING,
         'xmlns:soap' => self::SOAP_ENVELOPE,
         'xmlns:wcf' => self::DIAN_COLOMBIA,
@@ -118,24 +119,25 @@ class SOAP extends Sign
      *
      * @var array
      */
-    protected $signedInfoNS = [
+    protected array $signedInfoNS = [
         'xmlns:ds' => self::XMLDSIG,
         'xmlns:wsa' => self::ADDRESSING,
         'xmlns:soap' => self::SOAP_ENVELOPE,
         'xmlns:wcf' => self::DIAN_COLOMBIA,
     ];
 
-    public function __construct($pathCertificate = null, $passwors = null, $xmlString = null)
+    public function __construct($pathCertificate = null, $password = null, $xmlString = null)
     {
         $this->CurrentTime = time();
 
-        parent::__construct($pathCertificate, $passwors, $xmlString);
+        parent::__construct($pathCertificate, $password, $xmlString);
 
         return $this;
     }
 
     /**
      * Load XML.
+     * @throws DOMException
      */
     protected function loadXML()
     {
@@ -243,13 +245,11 @@ class SOAP extends Sign
     }
 
     /**
-     * Digest value.
-     *
-     * @param string $string
-     *
+     * @param $string
      * @return string
+     * @throws DOMException
      */
-    public function digestValue($string = null)
+    public function digestValue($string = null): string
     {
         $domDocument = new DOMDocument($this->version, $this->encoding);
         $domDocument->loadXML(str_replace('<wsa:To ', "<wsa:To {$this->joinArray($this->toNS)} ", $string ?? $this->domDocument->saveXML($this->to)));
@@ -267,11 +267,13 @@ class SOAP extends Sign
     /**
      * Signature.
      *
-     * @param string $string
+     * @param string|null $string
      *
      * @return string
+     * @throws DOMException
+     * @throws Exception
      */
-    public function signature($string = null)
+    public function signature(string $string = null): string
     {
         $domDocument = new DOMDocument($this->version, $this->encoding);
         $domDocument->loadXML(str_replace('<ds:SignedInfo', "<ds:SignedInfo {$this->joinArray($this->signedInfoNS)}", $string ?? $this->domDocument->saveXML($this->signedInfo)));

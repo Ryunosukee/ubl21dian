@@ -21,7 +21,5 @@ class SignPayrollNote extends SignInvoice
         'xmlns:xades141' => 'http://uri.etsi.org/01903/v1.4.1#',
         'xmlns:xs' => 'http://www.w3.org/2001/XMLSchema-instance',
         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance'
-        // 'SchemaLocation' => "",
-        // 'xsi:schemaLocation' => "dian:gov:co:facturaelectronica:NominaIndividualDeAjuste NominaIndividualDeAjusteElectronicaXSD.xsd"
     ];
 }

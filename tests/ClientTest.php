@@ -1,11 +1,12 @@
 <?php
 
-namespace ubl21dian\Tests;
+namespace ubl21dian\test;
 
 use DOMDocument;
 use ubl21dian\Client;
 use ubl21dian\Templates\SOAP\GetStatus;
 use ubl21dian\Templates\SOAP\GetStatusZip;
+use ubl21dian\test\TestCase;
 
 /**
  * Client test.
@@ -16,9 +17,9 @@ class ClientTest extends TestCase
     public function can_consume_web_service_dian()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $getStatusZip = new GetStatusZip($pathCertificate, $passwors);
+        $getStatusZip = new GetStatusZip($pathCertificate, $password);
         $getStatusZip->trackId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
 
         // Sign
@@ -37,9 +38,9 @@ class ClientTest extends TestCase
     public function a_soap_template_can_consume_web_service_dian()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $getStatusZip = new GetStatus($pathCertificate, $passwors);
+        $getStatusZip = new GetStatus($pathCertificate, $password);
         $getStatusZip->trackId = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
 
         // Sign to send

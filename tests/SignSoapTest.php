@@ -1,9 +1,10 @@
 <?php
 
-namespace ubl21dian\Tests;
+namespace ubl21dian\test;
 
 use DOMDocument;
 use ubl21dian\BinarySecurityToken\SOAP;
+use ubl21dian\test\TestCase;
 
 /**
  * Sign soap test.
@@ -31,9 +32,9 @@ XML;
     public function it_generates_signature_soap_with_string()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
-        $soap21 = new SOAP($pathCertificate, $passwors, $this->xmlString);
+        $soap21 = new SOAP($pathCertificate, $password, $this->xmlString);
 
         $domDocumentValidate = new DOMDocument();
         $domDocumentValidate->validateOnParse = true;
@@ -45,12 +46,12 @@ XML;
     public function it_generates_signature_soap_with_instance_of_dom_document()
     {
         $pathCertificate = dirname(dirname(__FILE__)).'/certicamara.p12';
-        $passwors = '3T3rN4661343';
+        $password = '3T3rN4661343';
 
         $domDocument = new DOMDocument();
         $domDocument->loadXML($this->xmlString);
 
-        $soap21 = new SOAP($pathCertificate, $passwors);
+        $soap21 = new SOAP($pathCertificate, $password);
         $soap21->Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/GetStatus';
         $soap21->To = 'https://vpfe-hab.dian.gov.co/WcfDianCustomerServices.svc';
         $soap21->CurrentTime = time();
