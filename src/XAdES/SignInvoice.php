@@ -98,7 +98,7 @@ class SignInvoice extends Sign
     protected $ids = [
         'SignedPropertiesID' => 'SIGNED-PROPS',
         'SignatureValueID' => 'SIG-VALUE',
-        'SignatureID' => 'RYUSOFT',
+        'SignatureID' => 'TORRESOFTWARE',
         'KeyInfoID' => 'KEY-INFO',
         'ReferenceID' => 'REF',
     ];
@@ -112,7 +112,7 @@ class SignInvoice extends Sign
         'xmlns:cac' => 'urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2',
         'xmlns:ext' => 'urn:oasis:names:specification:ubl:schema:xsd:CommonExtensionComponents-2',
         'xmlns:cbc' => 'urn:oasis:names:specification:ubl:schema:xsd:CommonBasicComponents-2',
-        'xmlns:sts' => 'urn:dian:gov:co:facturaelectronica:Structures-2-1',
+        'xmlns:sts' => 'dian:gov:co:facturaelectronica:Structures-2-1',
         'xmlns' => 'urn:oasis:names:specification:ubl:schema:xsd:Invoice-2',
         'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
         'xmlns:xades141' => 'http://uri.etsi.org/01903/v1.4.1#',
@@ -149,11 +149,11 @@ class SignInvoice extends Sign
 
     public $GuardarEn = false;
 
-    public function __construct($pathCertificate = null, $password = null, $xmlString = null, $algorithm = self::ALGO_SHA256)
+    public function __construct($pathCertificate = null, $passwors = null, $xmlString = null, $algorithm = self::ALGO_SHA256)
     {
         $this->algorithm = $algorithm;
 
-        parent::__construct($pathCertificate, $password, $xmlString);
+        parent::__construct($pathCertificate, $passwors, $xmlString);
 
         return $this;
     }
