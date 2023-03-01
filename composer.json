@@ -10,7 +10,7 @@
         "xml",
         "ubl",
         "core",
-        "v2.0"
+        "v3.0"
     ],
     "support": {
         "issues": "https://github.com/Ryunosukee/ubl21dian/issues",
@@ -20,12 +20,13 @@
     "authors": [
         {
             "name": "Ryunosukee",
+            "email": "daniel.hincapie9724@gmail.com",
             "homepage": "https://github.com/Ryunosukee"
         }
     ],
     "minimum-stability": "stable",
     "require": {
-        "php": ">= 7.4",
+        "php": ">= 8.0",
         "ext-dom": "*",
         "ext-xml": "*",
         "ext-curl": "*",
@@ -36,7 +37,7 @@
         "ext-json": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^10.0"
     },
     "autoload": {
         "psr-4": {

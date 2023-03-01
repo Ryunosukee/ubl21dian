@@ -25,7 +25,7 @@ Nucleo de pre-validación de facturación electronica - Colombia
 
 Requisitos mínimos
 ```bash
-php: >= 7.4
+php: >= 8.0
 ext-dom
 ext-xml
 ext-curl

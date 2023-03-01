@@ -265,10 +265,8 @@ class SOAP extends Sign
     }
 
     /**
-     * Signature.
-     *
+     * Signature
      * @param string|null $string
-     *
      * @return string
      * @throws DOMException
      * @throws Exception
