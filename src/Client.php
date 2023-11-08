@@ -30,11 +30,13 @@ class Client
      *
      * @var string
      */
-    private string $response;
+    private $response;
 
     /**
+     * Construct.
+     *
      * @param Template $template
-     * @param $GuardarEn
+     * @param bool $GuardarEn
      * @throws Exception
      */
     public function __construct(Template $template, $GuardarEn = false)
@@ -52,14 +54,14 @@ class Client
         curl_setopt($this->curl, CURLOPT_HTTPHEADER, [
             'Accept: application/xml',
             'Content-type: application/soap+xml',
-            'Content-length: '.strlen($template->xml),
+            'Content-length: ' . strlen($template->xml),
         ]);
         $GuardarEn = preg_replace("/[\r\n|\n|\r]+/", "", $GuardarEn);
-        if ($GuardarEn){
-          $file = fopen($GuardarEn, "w");
-          fwrite($file, $template->xml);
-          fclose($file);
-        }  
+        if ($GuardarEn) {
+            $file = fopen($GuardarEn, "w");
+            fwrite($file, $template->xml);
+            fclose($file);
+        }
 
         $this->exec();
 
@@ -70,10 +72,10 @@ class Client
      * Exec.
      * @throws Exception
      */
-    private function exec()
+    private function exec(): void
     {
         if (false === ($this->response = curl_exec($this->curl))) {
-            throw new Exception('Class '.get_class($this).': '.curl_error($this->curl));
+            throw new Exception('Class ' . get_class($this) . ': ' . curl_error($this->curl));
         }
     }
 
@@ -88,8 +90,18 @@ class Client
     }
 
     /**
-     * @param $GuardarEn
-     * @return array|mixed|object
+     * @return false|string
+     * @throws Exception
+     */
+    public function __toString()
+    {
+        return json_encode($this->getResponseToObject());
+    }
+
+    /**
+     * Get response to object.
+     *
+     * @return object
      * @throws Exception
      */
     public function getResponseToObject($GuardarEn = false)
@@ -98,15 +110,15 @@ class Client
             $xmlResponse = new DOMDocument();
             $xmlResponse->loadXML($this->response);
             $GuardarEn = preg_replace("/[\r\n|\n|\r]+/", "", $GuardarEn);
-            if($GuardarEn){
+            if ($GuardarEn) {
                 $file = fopen($GuardarEn, "w");
                 fwrite($file, $this->response);
                 fclose($file);
             }
             return $this->xmlToObject($xmlResponse);
-            
-        } catch (\Exception $e) {
-            throw new Exception('Class '.get_class($this).': '.$this->to.' '.$this->response);
+
+        } catch (Exception $e) {
+            throw new Exception('Class ' . get_class($this) . ': ' . $this->to . ' ' . $this->response);
         }
     }
 
@@ -159,14 +171,6 @@ class Client
             }
         }
 
-        return (object) $dataXML;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function __toString()
-    {
-        return json_encode($this->getResponseToObject());
+        return (object)$dataXML;
     }
 }

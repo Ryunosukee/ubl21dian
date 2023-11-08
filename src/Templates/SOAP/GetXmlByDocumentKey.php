@@ -3,41 +3,43 @@
 namespace ubl21dian\Templates\SOAP;
 
 use Exception;
-use ubl21dian\Templates\Template;
 use ubl21dian\Templates\CreateTemplate;
+use ubl21dian\Templates\Template;
 
 /**
  * Get status.
  */
-class GetStatusEvent extends Template implements CreateTemplate
+class GetXmlByDocumentKey extends Template implements CreateTemplate
 {
     /**
      * Action.
      *
      * @var string
      */
-    public string $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/GetStatusEvent';
+    public $Action = 'http://wcf.dian.colombia/IWcfDianCustomerServices/GetXmlByDocumentKey';
 
     /**
      * Required properties.
      *
      * @var array
      */
-    protected array $requiredProperties = [
+    protected $requiredProperties = [
         'trackId',
     ];
 
     /**
-     * @param $pathCertificate
-     * @param $password
-     * @param $Ambiente
+     * Construct.
+     *
+     * @param string $pathCertificate
+     * @param string $passwors
      * @throws Exception
      */
-    public function __construct($pathCertificate, $password, $Ambiente = false)
+    public function __construct($pathCertificate, $passwors, $Ambiente = false)
     {
-        parent::__construct($pathCertificate, $password);
-        if($Ambiente)
+        parent::__construct($pathCertificate, $passwors);
+        if ($Ambiente)
             $this->To = $Ambiente;
+//          $this->To = 'https://vpfe.dian.gov.co/WcfDianCustomerServices.svc?wsdl';
     }
 
     /**
@@ -50,10 +52,10 @@ class GetStatusEvent extends Template implements CreateTemplate
         return $this->templateXMLSOAP = <<<XML
 <soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:wcf="http://wcf.dian.colombia">
     <soap:Body>
-        <wcf:GetStatusEvent>
+        <wcf:GetXmlByDocumentKey>
             <!--Optional:-->
             <wcf:trackId>{$this->trackId}</wcf:trackId>
-        </wcf:GetStatusEvent>
+        </wcf:GetXmlByDocumentKey>
     </soap:Body>
 </soap:Envelope>
 XML;

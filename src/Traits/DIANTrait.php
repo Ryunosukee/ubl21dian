@@ -41,12 +41,12 @@ trait DIANTrait
      * Read certs.
      * @throws Exception
      */
-    protected function readCerts()
+    protected function readCerts(): void
     {
-        if (is_null($this->pathCertificate) || is_null($this->password)) {
+        if (is_null($this->pathCertificate) || is_null($this->passwors)) {
             throw new Exception('Class '.get_class($this).': requires the certificate path and password.');
         }
-        if (!openssl_pkcs12_read(file_get_contents($this->pathCertificate), $this->certs, $this->password)) {
+        if (!openssl_pkcs12_read(file_get_contents($this->pathCertificate), $this->certs, $this->passwors)) {
             throw new Exception('Class '.get_class($this).': Failure signing data: '.openssl_error_string());
         }
     }
@@ -55,7 +55,7 @@ trait DIANTrait
      * X509 export.
      * @throws Exception
      */
-    protected function x509Export()
+    protected function x509Export(): array|string
     {
         if (!empty($this->certs)) {
             openssl_x509_export($this->certs['cert'], $stringCert);
@@ -69,7 +69,7 @@ trait DIANTrait
     /**
      * Identifiers references.
      */
-    protected function identifiersReferences()
+    protected function identifiersReferences(): void
     {
         foreach ($this->ids as $key => $value) {
             $this->$key = mb_strtoupper("{$value}-".sha1(uniqid()));
@@ -77,11 +77,11 @@ trait DIANTrait
     }
 
     /**
+     * Remove child.
+     *
      * @param string $tagName
-     * @param int $item
-     * @return void
      */
-    protected function removeChild(string $tagName, int $item = 0)
+    protected function removeChild($tagName, $item = 0): void
     {
         if (is_null($tag = $this->domDocument->documentElement->getElementsByTagName($tagName)->item($item))) {
             return;
@@ -91,14 +91,15 @@ trait DIANTrait
     }
 
     /**
-     * @param $tagName
+     * Get tag.
+     *
+     * @param string $tagName
      * @param int $item
-     * @param $attribute
-     * @param $attribute_value
-     * @return void
+     *
+     * @return mixed
      * @throws Exception
      */
-    protected function getTag($tagName, int $item = 0, $attribute = NULL, $attribute_value = NULL)
+    protected function getTag($tagName, $item = 0, $attribute = NULL, $attribute_value = NULL)
     {
         $tag = $this->domDocument->documentElement->getElementsByTagName($tagName);
 
@@ -122,14 +123,14 @@ trait DIANTrait
      * @param $xpath
      * @return bool|string|null
      */
-    protected function ValueXML($stringXML, $xpath)
+    protected function ValueXML($stringXML, $xpath): bool|string|null
     {
         if(substr($xpath, 0, 1) != '/')
             return NULL;
         $search = substr($xpath, 1, strpos(substr($xpath, 1), '/'));
         $posinicio = strpos($stringXML, "<".$search);
         if($posinicio == 0)
-           return false;
+            return false;
         $posinicio = strpos($stringXML, ">", $posinicio) + 1;
         $posCierre = strpos($stringXML, "</".$search.">", $posinicio);
         if($posCierre == 0)
@@ -142,13 +143,16 @@ trait DIANTrait
     }
 
     /**
-     * @param $query
+     * Get query.
+     *
+     * @param string $query
      * @param bool $validate
      * @param int $item
+     *
      * @return mixed
      * @throws Exception
      */
-    protected function getQuery($query, bool $validate = true, int $item = 0)
+    protected function getQuery($query, $validate = true, $item = 0): mixed
     {
         $tag = $this->domXPath->query($query);
 
@@ -166,12 +170,12 @@ trait DIANTrait
      * Join array.
      *
      * @param array  $array
-     * @param bool $formatNS
+     * @param bool   $formatNS
      * @param string $join
      *
      * @return string
      */
-    protected function joinArray(array $array, bool $formatNS = true, string $join = ' '): string
+    protected function joinArray(array $array, $formatNS = true, $join = ' '): string
     {
         return implode($join, array_map(function ($value, $key) use ($formatNS) {
             return ($formatNS) ? "{$key}=\"$value\"" : "{$key}=$value";
