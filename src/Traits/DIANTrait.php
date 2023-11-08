@@ -43,10 +43,10 @@ trait DIANTrait
      */
     protected function readCerts(): void
     {
-        if (is_null($this->pathCertificate) || is_null($this->passwors)) {
+        if (is_null($this->pathCertificate) || is_null($this->password)) {
             throw new Exception('Class '.get_class($this).': requires the certificate path and password.');
         }
-        if (!openssl_pkcs12_read(file_get_contents($this->pathCertificate), $this->certs, $this->passwors)) {
+        if (!openssl_pkcs12_read(file_get_contents($this->pathCertificate), $this->certs, $this->password)) {
             throw new Exception('Class '.get_class($this).': Failure signing data: '.openssl_error_string());
         }
     }
