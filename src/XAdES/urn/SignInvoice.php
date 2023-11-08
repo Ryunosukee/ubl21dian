@@ -149,11 +149,11 @@ class SignInvoice extends Sign
 
     public $GuardarEn = false;
 
-    public function __construct($pathCertificate = null, $passwors = null, $xmlString = null, $algorithm = self::ALGO_SHA256)
+    public function __construct($pathCertificate = null, $password = null, $xmlString = null, $algorithm = self::ALGO_SHA256)
     {
         $this->algorithm = $algorithm;
 
-        parent::__construct($pathCertificate, $passwors, $xmlString);
+        parent::__construct($pathCertificate, $password, $xmlString);
 
         return $this;
     }

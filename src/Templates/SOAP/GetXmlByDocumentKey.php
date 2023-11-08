@@ -31,12 +31,12 @@ class GetXmlByDocumentKey extends Template implements CreateTemplate
      * Construct.
      *
      * @param string $pathCertificate
-     * @param string $passwors
+     * @param string $password
      * @throws Exception
      */
-    public function __construct($pathCertificate, $passwors, $Ambiente = false)
+    public function __construct($pathCertificate, $password, $Ambiente = false)
     {
-        parent::__construct($pathCertificate, $passwors);
+        parent::__construct($pathCertificate, $password);
         if ($Ambiente)
             $this->To = $Ambiente;
 //          $this->To = 'https://vpfe.dian.gov.co/WcfDianCustomerServices.svc?wsdl';
