@@ -41,7 +41,7 @@ trait DIANTrait
      * Read certs.
      * @throws Exception
      */
-    protected function readCerts(): void
+    protected function readCerts()
     {
         if (is_null($this->pathCertificate) || is_null($this->password)) {
             throw new Exception('Class '.get_class($this).': requires the certificate path and password.');
@@ -55,7 +55,7 @@ trait DIANTrait
      * X509 export.
      * @throws Exception
      */
-    protected function x509Export(): array|string
+    protected function x509Export()
     {
         if (!empty($this->certs)) {
             openssl_x509_export($this->certs['cert'], $stringCert);
@@ -69,7 +69,7 @@ trait DIANTrait
     /**
      * Identifiers references.
      */
-    protected function identifiersReferences(): void
+    protected function identifiersReferences()
     {
         foreach ($this->ids as $key => $value) {
             $this->$key = mb_strtoupper("{$value}-".sha1(uniqid()));
@@ -77,11 +77,11 @@ trait DIANTrait
     }
 
     /**
-     * Remove child.
-     *
      * @param string $tagName
+     * @param int $item
+     * @return void
      */
-    protected function removeChild($tagName, $item = 0): void
+    protected function removeChild(string $tagName, int $item = 0)
     {
         if (is_null($tag = $this->domDocument->documentElement->getElementsByTagName($tagName)->item($item))) {
             return;
@@ -91,15 +91,14 @@ trait DIANTrait
     }
 
     /**
-     * Get tag.
-     *
-     * @param string $tagName
+     * @param $tagName
      * @param int $item
-     *
-     * @return mixed
+     * @param $attribute
+     * @param $attribute_value
+     * @return void
      * @throws Exception
      */
-    protected function getTag($tagName, $item = 0, $attribute = NULL, $attribute_value = NULL)
+    protected function getTag($tagName, int $item = 0, $attribute = NULL, $attribute_value = NULL)
     {
         $tag = $this->domDocument->documentElement->getElementsByTagName($tagName);
 
@@ -123,14 +122,14 @@ trait DIANTrait
      * @param $xpath
      * @return bool|string|null
      */
-    protected function ValueXML($stringXML, $xpath): bool|string|null
+    protected function ValueXML($stringXML, $xpath)
     {
         if(substr($xpath, 0, 1) != '/')
             return NULL;
         $search = substr($xpath, 1, strpos(substr($xpath, 1), '/'));
         $posinicio = strpos($stringXML, "<".$search);
         if($posinicio == 0)
-            return false;
+           return false;
         $posinicio = strpos($stringXML, ">", $posinicio) + 1;
         $posCierre = strpos($stringXML, "</".$search.">", $posinicio);
         if($posCierre == 0)
@@ -143,16 +142,13 @@ trait DIANTrait
     }
 
     /**
-     * Get query.
-     *
-     * @param string $query
+     * @param $query
      * @param bool $validate
      * @param int $item
-     *
      * @return mixed
      * @throws Exception
      */
-    protected function getQuery($query, $validate = true, $item = 0): mixed
+    protected function getQuery($query, bool $validate = true, int $item = 0)
     {
         $tag = $this->domXPath->query($query);
 
@@ -170,12 +166,12 @@ trait DIANTrait
      * Join array.
      *
      * @param array  $array
-     * @param bool   $formatNS
+     * @param bool $formatNS
      * @param string $join
      *
      * @return string
      */
-    protected function joinArray(array $array, $formatNS = true, $join = ' '): string
+    protected function joinArray(array $array, bool $formatNS = true, string $join = ' '): string
     {
         return implode($join, array_map(function ($value, $key) use ($formatNS) {
             return ($formatNS) ? "{$key}=\"$value\"" : "{$key}=$value";
